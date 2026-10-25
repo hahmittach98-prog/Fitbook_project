@@ -1,0 +1,8 @@
+# Éditeurs
+.idea/
+.vscode/
+
+# Divers
+*.log
+.DS_Store
+Thumbs.db
