@@ -40,4 +40,19 @@ class CoursRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
+
+    public function search(?string $q, ?string $niveau): array
+    {
+        $qb = $this->createQueryBuilder('c');
+
+        if ($q) {
+            $qb->andWhere('c.nom LIKE :q OR c.description LIKE :q')
+               ->setParameter('q', '%' . $q . '%');
+        }
+        if ($niveau) {
+            $qb->andWhere('c.niveau = :niveau')->setParameter('niveau', $niveau);
+        }
+
+        return $qb->orderBy('c.nom', 'ASC')->getQuery()->getResult();
+    }
 }
