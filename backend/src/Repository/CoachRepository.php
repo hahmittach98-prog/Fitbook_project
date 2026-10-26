@@ -40,4 +40,23 @@ class CoachRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
+
+    public function search(?string $q, ?string $specialite, ?float $tarifMax): array
+    {
+        $qb = $this->createQueryBuilder('c')->join('c.user', 'u');
+
+        if ($q) {
+            $qb->andWhere('u.nom LIKE :q OR u.prenom LIKE :q OR c.description LIKE :q')
+               ->setParameter('q', '%' . $q . '%');
+        }
+        if ($specialite) {
+            $qb->andWhere('c.specialite = :sp')->setParameter('sp', $specialite);
+        }
+        if ($tarifMax) {
+            $qb->andWhere('c.tarifHoraire <= :tarif')->setParameter('tarif', $tarifMax);
+        }
+
+        return $qb->orderBy('u.nom', 'ASC')->getQuery()->getResult();
+    }
+
 }
