@@ -40,4 +40,22 @@ class SalleRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
+
+    public function search(?string $q, ?string $ville, ?int $capaciteMin): array
+    {
+        $qb = $this->createQueryBuilder('s');
+
+        if ($q) {
+            $qb->andWhere('s.nom LIKE :q OR s.description LIKE :q')
+               ->setParameter('q', '%' . $q . '%');
+        }
+        if ($ville) {
+            $qb->andWhere('s.ville = :ville')->setParameter('ville', $ville);
+        }
+        if ($capaciteMin) {
+            $qb->andWhere('s.capacite >= :cap')->setParameter('cap', $capaciteMin);
+        }
+
+        return $qb->orderBy('s.nom', 'ASC')->getQuery()->getResult();
+    }
 }
