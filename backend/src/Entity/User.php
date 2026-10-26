@@ -37,7 +37,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $nom = null;
 
     #[ORM\Column(length: 50)]
-    private ?string $PRENOM = null;
+    private ?string $prenom = null;
 
     #[ORM\Column(length: 50, nullable: true)]
     private ?string $telephone = null;
@@ -169,14 +169,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getPRENOM(): ?string
+    public function getPrenom(): ?string
     {
-        return $this->PRENOM;
+        return $this->prenom;
     }
 
-    public function setPRENOM(string $PRENOM): static
+    public function setPrenom(string $prenom): static
     {
-        $this->PRENOM = $PRENOM;
+        $this->prenom = $prenom;
 
         return $this;
     }
