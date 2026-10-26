@@ -40,4 +40,22 @@ class SeanceRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
+
+    public function search(?string $date, ?int $salleId, ?int $coachId, ?int $coursId, ?float $prixMax): array
+    {
+        $qb = $this->createQueryBuilder('s');
+
+        if ($date) {
+            $qb->andWhere('s.dateSeance = :d')
+               ->setParameter('d', new \DateTimeImmutable($date), 'date_immutable');
+        }
+        if ($salleId) { $qb->andWhere('s.salle = :salle')->setParameter('salle', $salleId); }
+        if ($coachId) { $qb->andWhere('s.coach = :coach')->setParameter('coach', $coachId); }
+        if ($coursId) { $qb->andWhere('s.cours = :cours')->setParameter('cours', $coursId); }
+        if ($prixMax !== null) { $qb->andWhere('s.prix <= :prix')->setParameter('prix', $prixMax); }
+
+        return $qb->orderBy('s.dateSeance', 'ASC')
+                  ->addOrderBy('s.heureDebut', 'ASC')
+                  ->getQuery()->getResult();
+    }
 }
