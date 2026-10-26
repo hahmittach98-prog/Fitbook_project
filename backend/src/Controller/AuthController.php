@@ -11,6 +11,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
@@ -23,7 +25,8 @@ class AuthController extends AbstractController
         UserPasswordHasherInterface $hasher,
         EntityManagerInterface $em,
         UserRepository $users,
-        ValidatorInterface $validator
+        ValidatorInterface $validator,
+        MailerInterface $mailer
     ): JsonResponse {
         $data = json_decode($request->getContent(), true);
         if (!is_array($data)) {
@@ -71,10 +74,35 @@ class AuthController extends AbstractController
 
         $em->persist($user);
         $em->flush();
+                $lien = $request->getSchemeAndHttpHost() . '/api/confirm-email/' . $user->getTokenConfirmation();
+        $email = (new Email())
+            ->from('no-reply@fitbook.local')
+            ->to($user->getEmail())
+            ->subject('FitBook : confirmez votre email')
+            ->text("Bienvenue sur FitBook !\nConfirmez votre compte : " . $lien);
+        try {
+            $mailer->send($email);
+        } catch (\Throwable $e) {
+            // l'inscription reste valide même si l'envoi échoue
+        }
 
         return $this->json(
             ['message' => 'Compte créé. Vérifiez votre email pour le confirmer.'],
             Response::HTTP_CREATED
         );
+    }
+
+#[Route('/confirm-email/{token}', name: 'api_confirm_email', methods: ['GET'])]
+    public function confirmEmail(string $token, UserRepository $users, EntityManagerInterface $em): JsonResponse
+    {
+        $user = $users->findOneBy(['tokenConfirmation' => $token]);
+        if (!$user) {
+            return $this->json(['erreur' => 'Token invalide'], Response::HTTP_NOT_FOUND);
+        }
+        $user->setIsVerified(true);
+        $user->setTokenConfirmation(null);
+        $em->flush();
+
+        return $this->json(['message' => 'Email confirmé, vous pouvez vous connecter.']);
     }
 }
