@@ -168,18 +168,18 @@ class Salle
         return $this->cours;
     }
 
-    public function addCour(Cours $cour): static
+    public function addCours(Cours $cours): static
     {
-        if (!$this->cours->contains($cour)) {
-            $this->cours->add($cour);
+        if (!$this->cours->contains($cours)) {
+            $this->cours->add($cours);
         }
 
         return $this;
     }
 
-    public function removeCour(Cours $cour): static
+    public function removeCours(Cours $cours): static
     {
-        $this->cours->removeElement($cour);
+        $this->cours->removeElement($cours);
 
         return $this;
     }

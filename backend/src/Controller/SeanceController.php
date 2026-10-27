@@ -6,6 +6,7 @@ use App\Entity\Seance;
 use App\Repository\CoachRepository;
 use App\Repository\CoursRepository;
 use App\Repository\SalleRepository;
+use App\Validator\JsonSchemaValidator;
 use App\Repository\SeanceRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -62,18 +63,15 @@ class SeanceController extends AbstractController
         EntityManagerInterface $em,
         CoachRepository $coachs,
         CoursRepository $cours,
-        SalleRepository $salles
+        SalleRepository $salles,
+        JsonSchemaValidator $schema
     ): JsonResponse {
         if (!$this->isGranted('ROLE_COACH') && !$this->isGranted('ROLE_SALLE')) {
             return $this->json(['erreur' => 'Accès refusé'], Response::HTTP_FORBIDDEN);
         }
         $d = json_decode($request->getContent(), true) ?? [];
-
-        foreach (['date', 'heureDebut', 'heureFin', 'capaciteMax', 'prix', 'coachId', 'coursId', 'salleId'] as $champ) {
-            if (!isset($d[$champ]) || $d[$champ] === '') {
-                return $this->json(['erreur' => "Champ requis : $champ"], Response::HTTP_UNPROCESSABLE_ENTITY);
-            }
-        }
+        
+        
 
         $coach = $coachs->find($d['coachId']);
         $cours = $cours->find($d['coursId']);
