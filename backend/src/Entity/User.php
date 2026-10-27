@@ -232,7 +232,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @return Collection<int, Coach>
      */
-    public function getFavorisCoach(): Collection
+    public function getFavorisCoachs(): Collection
     {
         return $this->favorisCoach;
     }

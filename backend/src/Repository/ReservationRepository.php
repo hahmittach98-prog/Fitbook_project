@@ -40,4 +40,15 @@ class ReservationRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
+
+    public function countConfirmed($seance): int
+    {
+        return (int) $this->createQueryBuilder('r')
+            ->select('COUNT(r.id)')
+            ->andWhere('r.seance = :s')
+            ->andWhere("r.statut = 'confirmee'")
+            ->setParameter('s', $seance)
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
 }
