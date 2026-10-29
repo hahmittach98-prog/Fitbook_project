@@ -2,9 +2,12 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiResource;
 use App\Repository\ReservationRepository;
 use Doctrine\ORM\Mapping as ORM;
 
+#[ApiResource]
+#[ORM\Table(name: "reservations")]
 #[ORM\Entity(repositoryClass: ReservationRepository::class)]
 class Reservation
 {

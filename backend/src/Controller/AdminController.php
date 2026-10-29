@@ -37,6 +37,11 @@ class AdminController extends AbstractController
         if (!$u) {
             return $this->json(['erreur' => 'Utilisateur introuvable'], Response::HTTP_NOT_FOUND);
         }
+
+                $profil = $em->getRepository(\App\Entity\Coach::class)->findOneBy(['user' => $u]);
+        if ($profil) {
+            $em->remove($profil);
+        }
         $em->remove($u);
         $em->flush();
 
@@ -100,5 +105,19 @@ class AdminController extends AbstractController
         $em->flush();
 
         return $this->json(['message' => 'Avis mis à jour']);
+    }
+
+        #[Route('/users/{id}/verify', name: 'api_admin_user_verify', methods: ['PUT'])]
+    public function verifyUser(int $id, UserRepository $repo, EntityManagerInterface $em): JsonResponse
+    {
+        $u = $repo->find($id);
+        if (!$u) {
+            return $this->json(['erreur' => 'Utilisateur introuvable'], Response::HTTP_NOT_FOUND);
+        }
+        $u->setIsVerified(true);
+        $u->setTokenConfirmation(null);
+        $em->flush();
+
+        return $this->json(['message' => 'Compte activé']);
     }
 }

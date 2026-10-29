@@ -2,10 +2,13 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiResource;
 use App\Repository\CoursRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
+#[ApiResource]
+#[ORM\Table(name: "cours")]
 #[ORM\Entity(repositoryClass: CoursRepository::class)]
 class Cours
 {

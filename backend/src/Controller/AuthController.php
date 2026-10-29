@@ -86,8 +86,8 @@ class AuthController extends AbstractController
             // l'inscription reste valide même si l'envoi échoue
         }
 
-        return $this->json(
-            ['message' => 'Compte créé. Vérifiez votre email pour le confirmer.'],
+         return $this->json(
+            ['message' => 'Compte créé. Vérifiez votre email pour le confirmer.', 'id' => $user->getId()],
             Response::HTTP_CREATED
         );
     }
