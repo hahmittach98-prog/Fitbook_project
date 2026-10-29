@@ -11,8 +11,8 @@ BEGIN
            s.capacite_max,
            COUNT(r.id) AS reservations_confirmees,
            s.capacite_max - COUNT(r.id) AS places_restantes
-    FROM seance s
-    LEFT JOIN reservation r ON r.seance_id = s.id AND r.statut = 'confirmee'
+    FROM seances s
+    LEFT JOIN reservations r ON r.seance_id = s.id AND r.statut = 'confirmee'
     WHERE s.id = p_seance_id
     GROUP BY s.id, s.capacite_max;
 END//
