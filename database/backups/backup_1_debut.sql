@@ -35,9 +35,9 @@ CREATE TABLE `avis` (
   KEY `IDX_8F91ABF0A76ED395` (`user_id`),
   KEY `IDX_8F91ABF03C105691` (`coach_id`),
   KEY `IDX_8F91ABF0DC304035` (`salle_id`),
-  CONSTRAINT `FK_8F91ABF03C105691` FOREIGN KEY (`coach_id`) REFERENCES `coach` (`id`),
-  CONSTRAINT `FK_8F91ABF0A76ED395` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`),
-  CONSTRAINT `FK_8F91ABF0DC304035` FOREIGN KEY (`salle_id`) REFERENCES `salle` (`id`)
+  CONSTRAINT `FK_8F91ABF03C105691` FOREIGN KEY (`coach_id`) REFERENCES `coachs` (`id`),
+  CONSTRAINT `FK_8F91ABF0A76ED395` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
+  CONSTRAINT `FK_8F91ABF0DC304035` FOREIGN KEY (`salle_id`) REFERENCES `salles` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -51,32 +51,36 @@ LOCK TABLES `avis` WRITE;
 UNLOCK TABLES;
 
 --
--- Table structure for table `coach`
+-- Table structure for table `coachs`
 --
 
-DROP TABLE IF EXISTS `coach`;
+DROP TABLE IF EXISTS `coachs`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `coach` (
+CREATE TABLE `coachs` (
   `id` int NOT NULL AUTO_INCREMENT,
   `specialite` varchar(255) NOT NULL,
   `description` longtext,
   `tarif_horaire` double DEFAULT NULL,
   `photo` varchar(255) DEFAULT NULL,
   `user_id` int NOT NULL,
+  `image_name` varchar(255) DEFAULT NULL,
+  `image_size` int DEFAULT NULL,
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `UNIQ_3F596DCCA76ED395` (`user_id`),
-  CONSTRAINT `FK_3F596DCCA76ED395` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
+  UNIQUE KEY `UNIQ_89E318FDA76ED395` (`user_id`),
+  CONSTRAINT `FK_89E318FDA76ED395` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `coach`
+-- Dumping data for table `coachs`
 --
 
-LOCK TABLES `coach` WRITE;
-/*!40000 ALTER TABLE `coach` DISABLE KEYS */;
-/*!40000 ALTER TABLE `coach` ENABLE KEYS */;
+LOCK TABLES `coachs` WRITE;
+/*!40000 ALTER TABLE `coachs` DISABLE KEYS */;
+/*!40000 ALTER TABLE `coachs` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -105,13 +109,13 @@ LOCK TABLES `cours` WRITE;
 UNLOCK TABLES;
 
 --
--- Table structure for table `disponibilite`
+-- Table structure for table `disponibilites`
 --
 
-DROP TABLE IF EXISTS `disponibilite`;
+DROP TABLE IF EXISTS `disponibilites`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `disponibilite` (
+CREATE TABLE `disponibilites` (
   `id` int NOT NULL AUTO_INCREMENT,
   `jour_semaine` varchar(50) NOT NULL,
   `heure_debut` time NOT NULL,
@@ -119,20 +123,20 @@ CREATE TABLE `disponibilite` (
   `coach_id` int DEFAULT NULL,
   `salle_id` int DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `IDX_2CBACE2F3C105691` (`coach_id`),
-  KEY `IDX_2CBACE2FDC304035` (`salle_id`),
-  CONSTRAINT `FK_2CBACE2F3C105691` FOREIGN KEY (`coach_id`) REFERENCES `coach` (`id`),
-  CONSTRAINT `FK_2CBACE2FDC304035` FOREIGN KEY (`salle_id`) REFERENCES `salle` (`id`)
+  KEY `IDX_B0F3489C3C105691` (`coach_id`),
+  KEY `IDX_B0F3489CDC304035` (`salle_id`),
+  CONSTRAINT `FK_B0F3489C3C105691` FOREIGN KEY (`coach_id`) REFERENCES `coachs` (`id`),
+  CONSTRAINT `FK_B0F3489CDC304035` FOREIGN KEY (`salle_id`) REFERENCES `salles` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `disponibilite`
+-- Dumping data for table `disponibilites`
 --
 
-LOCK TABLES `disponibilite` WRITE;
-/*!40000 ALTER TABLE `disponibilite` DISABLE KEYS */;
-/*!40000 ALTER TABLE `disponibilite` ENABLE KEYS */;
+LOCK TABLES `disponibilites` WRITE;
+/*!40000 ALTER TABLE `disponibilites` DISABLE KEYS */;
+/*!40000 ALTER TABLE `disponibilites` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -156,7 +160,7 @@ CREATE TABLE `doctrine_migration_versions` (
 
 LOCK TABLES `doctrine_migration_versions` WRITE;
 /*!40000 ALTER TABLE `doctrine_migration_versions` DISABLE KEYS */;
-INSERT INTO `doctrine_migration_versions` VALUES ('DoctrineMigrations\\Version20261026153202','2026-10-26 15:32:49',1418),('DoctrineMigrations\\Version20261026215447','2026-10-26 21:55:28',926),('DoctrineMigrations\\Version20261026225450','2026-10-26 22:56:03',858),('DoctrineMigrations\\Version20261027142345','2026-10-27 14:24:29',1851),('DoctrineMigrations\\Version20261027144408','2026-10-27 14:44:20',3163);
+INSERT INTO `doctrine_migration_versions` VALUES ('DoctrineMigrations\\Version20261029204206','2026-10-29 20:42:28',1211),('DoctrineMigrations\\Version20261030002821','2026-10-30 00:29:12',482);
 /*!40000 ALTER TABLE `doctrine_migration_versions` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -190,66 +194,36 @@ LOCK TABLES `messenger_messages` WRITE;
 UNLOCK TABLES;
 
 --
--- Table structure for table `reservation`
+-- Table structure for table `reservations`
 --
 
-DROP TABLE IF EXISTS `reservation`;
+DROP TABLE IF EXISTS `reservations`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `reservation` (
+CREATE TABLE `reservations` (
   `id` int NOT NULL AUTO_INCREMENT,
   `date_reservation` datetime NOT NULL,
   `statut` varchar(50) NOT NULL,
   `date_annulation` datetime DEFAULT NULL,
   `user_id` int NOT NULL,
   `seance_id` int NOT NULL,
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `IDX_42C84955A76ED395` (`user_id`),
-  KEY `IDX_42C84955E3797A94` (`seance_id`),
-  CONSTRAINT `FK_42C84955A76ED395` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`),
-  CONSTRAINT `FK_42C84955E3797A94` FOREIGN KEY (`seance_id`) REFERENCES `seance` (`id`)
+  KEY `IDX_4DA239A76ED395` (`user_id`),
+  KEY `IDX_4DA239E3797A94` (`seance_id`),
+  CONSTRAINT `FK_4DA239A76ED395` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
+  CONSTRAINT `FK_4DA239E3797A94` FOREIGN KEY (`seance_id`) REFERENCES `seances` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `reservation`
+-- Dumping data for table `reservations`
 --
 
-LOCK TABLES `reservation` WRITE;
-/*!40000 ALTER TABLE `reservation` DISABLE KEYS */;
-/*!40000 ALTER TABLE `reservation` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `salle`
---
-
-DROP TABLE IF EXISTS `salle`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `salle` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `nom` varchar(255) NOT NULL,
-  `ville` varchar(255) NOT NULL,
-  `adresse` varchar(255) NOT NULL,
-  `capacite` int NOT NULL,
-  `telephone` varchar(255) DEFAULT NULL,
-  `description` longtext,
-  `photo` varchar(255) DEFAULT NULL,
-  `gestionnaire_id` int NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `IDX_4E977E5C6885AC1B` (`gestionnaire_id`),
-  CONSTRAINT `FK_4E977E5C6885AC1B` FOREIGN KEY (`gestionnaire_id`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `salle`
---
-
-LOCK TABLES `salle` WRITE;
-/*!40000 ALTER TABLE `salle` DISABLE KEYS */;
-/*!40000 ALTER TABLE `salle` ENABLE KEYS */;
+LOCK TABLES `reservations` WRITE;
+/*!40000 ALTER TABLE `reservations` DISABLE KEYS */;
+/*!40000 ALTER TABLE `reservations` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -265,8 +239,8 @@ CREATE TABLE `salle_coach` (
   PRIMARY KEY (`salle_id`,`coach_id`),
   KEY `IDX_D25C6EA5DC304035` (`salle_id`),
   KEY `IDX_D25C6EA53C105691` (`coach_id`),
-  CONSTRAINT `FK_D25C6EA53C105691` FOREIGN KEY (`coach_id`) REFERENCES `coach` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `FK_D25C6EA5DC304035` FOREIGN KEY (`salle_id`) REFERENCES `salle` (`id`) ON DELETE CASCADE
+  CONSTRAINT `FK_D25C6EA53C105691` FOREIGN KEY (`coach_id`) REFERENCES `coachs` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `FK_D25C6EA5DC304035` FOREIGN KEY (`salle_id`) REFERENCES `salles` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -293,7 +267,7 @@ CREATE TABLE `salle_cours` (
   KEY `IDX_10CF8FF5DC304035` (`salle_id`),
   KEY `IDX_10CF8FF57ECF78B0` (`cours_id`),
   CONSTRAINT `FK_10CF8FF57ECF78B0` FOREIGN KEY (`cours_id`) REFERENCES `cours` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `FK_10CF8FF5DC304035` FOREIGN KEY (`salle_id`) REFERENCES `salle` (`id`) ON DELETE CASCADE
+  CONSTRAINT `FK_10CF8FF5DC304035` FOREIGN KEY (`salle_id`) REFERENCES `salles` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -307,13 +281,49 @@ LOCK TABLES `salle_cours` WRITE;
 UNLOCK TABLES;
 
 --
--- Table structure for table `seance`
+-- Table structure for table `salles`
 --
 
-DROP TABLE IF EXISTS `seance`;
+DROP TABLE IF EXISTS `salles`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `seance` (
+CREATE TABLE `salles` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `nom` varchar(255) NOT NULL,
+  `ville` varchar(255) NOT NULL,
+  `adresse` varchar(255) NOT NULL,
+  `capacite` int NOT NULL,
+  `telephone` varchar(255) DEFAULT NULL,
+  `description` longtext,
+  `photo` varchar(255) DEFAULT NULL,
+  `gestionnaire_id` int NOT NULL,
+  `image_name` varchar(255) DEFAULT NULL,
+  `image_size` int DEFAULT NULL,
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `IDX_799D45AA6885AC1B` (`gestionnaire_id`),
+  CONSTRAINT `FK_799D45AA6885AC1B` FOREIGN KEY (`gestionnaire_id`) REFERENCES `users` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `salles`
+--
+
+LOCK TABLES `salles` WRITE;
+/*!40000 ALTER TABLE `salles` DISABLE KEYS */;
+/*!40000 ALTER TABLE `salles` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `seances`
+--
+
+DROP TABLE IF EXISTS `seances`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `seances` (
   `id` int NOT NULL AUTO_INCREMENT,
   `date_seance` date NOT NULL,
   `heure_debut` time NOT NULL,
@@ -324,55 +334,25 @@ CREATE TABLE `seance` (
   `coach_id` int NOT NULL,
   `salle_id` int NOT NULL,
   `cours_id` int NOT NULL,
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `IDX_DF7DFD0E3C105691` (`coach_id`),
-  KEY `IDX_DF7DFD0EDC304035` (`salle_id`),
-  KEY `IDX_DF7DFD0E7ECF78B0` (`cours_id`),
-  CONSTRAINT `FK_DF7DFD0E3C105691` FOREIGN KEY (`coach_id`) REFERENCES `coach` (`id`),
-  CONSTRAINT `FK_DF7DFD0E7ECF78B0` FOREIGN KEY (`cours_id`) REFERENCES `cours` (`id`),
-  CONSTRAINT `FK_DF7DFD0EDC304035` FOREIGN KEY (`salle_id`) REFERENCES `salle` (`id`)
+  KEY `IDX_FC699FF13C105691` (`coach_id`),
+  KEY `IDX_FC699FF1DC304035` (`salle_id`),
+  KEY `IDX_FC699FF17ECF78B0` (`cours_id`),
+  CONSTRAINT `FK_FC699FF13C105691` FOREIGN KEY (`coach_id`) REFERENCES `coachs` (`id`),
+  CONSTRAINT `FK_FC699FF17ECF78B0` FOREIGN KEY (`cours_id`) REFERENCES `cours` (`id`),
+  CONSTRAINT `FK_FC699FF1DC304035` FOREIGN KEY (`salle_id`) REFERENCES `salles` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `seance`
+-- Dumping data for table `seances`
 --
 
-LOCK TABLES `seance` WRITE;
-/*!40000 ALTER TABLE `seance` DISABLE KEYS */;
-/*!40000 ALTER TABLE `seance` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `user`
---
-
-DROP TABLE IF EXISTS `user`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `user` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `email` varchar(180) NOT NULL,
-  `roles` json NOT NULL,
-  `password` varchar(255) NOT NULL,
-  `nom` varchar(50) NOT NULL,
-  `prenom` varchar(50) NOT NULL,
-  `telephone` varchar(50) DEFAULT NULL,
-  `is_verified` tinyint NOT NULL,
-  `date_inscription` datetime NOT NULL,
-  `token_confirmation` varchar(100) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `UNIQ_IDENTIFIER_EMAIL` (`email`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `user`
---
-
-LOCK TABLES `user` WRITE;
-/*!40000 ALTER TABLE `user` DISABLE KEYS */;
-/*!40000 ALTER TABLE `user` ENABLE KEYS */;
+LOCK TABLES `seances` WRITE;
+/*!40000 ALTER TABLE `seances` DISABLE KEYS */;
+/*!40000 ALTER TABLE `seances` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -388,8 +368,8 @@ CREATE TABLE `user_coach` (
   PRIMARY KEY (`user_id`,`coach_id`),
   KEY `IDX_DD9B9694A76ED395` (`user_id`),
   KEY `IDX_DD9B96943C105691` (`coach_id`),
-  CONSTRAINT `FK_DD9B96943C105691` FOREIGN KEY (`coach_id`) REFERENCES `coach` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `FK_DD9B9694A76ED395` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE
+  CONSTRAINT `FK_DD9B96943C105691` FOREIGN KEY (`coach_id`) REFERENCES `coachs` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `FK_DD9B9694A76ED395` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -416,7 +396,7 @@ CREATE TABLE `user_cours` (
   KEY `IDX_1F0877C4A76ED395` (`user_id`),
   KEY `IDX_1F0877C47ECF78B0` (`cours_id`),
   CONSTRAINT `FK_1F0877C47ECF78B0` FOREIGN KEY (`cours_id`) REFERENCES `cours` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `FK_1F0877C4A76ED395` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE
+  CONSTRAINT `FK_1F0877C4A76ED395` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -442,8 +422,8 @@ CREATE TABLE `user_salle` (
   PRIMARY KEY (`user_id`,`salle_id`),
   KEY `IDX_AC558504A76ED395` (`user_id`),
   KEY `IDX_AC558504DC304035` (`salle_id`),
-  CONSTRAINT `FK_AC558504A76ED395` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `FK_AC558504DC304035` FOREIGN KEY (`salle_id`) REFERENCES `salle` (`id`) ON DELETE CASCADE
+  CONSTRAINT `FK_AC558504A76ED395` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `FK_AC558504DC304035` FOREIGN KEY (`salle_id`) REFERENCES `salles` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -455,6 +435,123 @@ LOCK TABLES `user_salle` WRITE;
 /*!40000 ALTER TABLE `user_salle` DISABLE KEYS */;
 /*!40000 ALTER TABLE `user_salle` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Table structure for table `users`
+--
+
+DROP TABLE IF EXISTS `users`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `users` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `email` varchar(180) NOT NULL,
+  `roles` json NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `nom` varchar(50) NOT NULL,
+  `prenom` varchar(50) NOT NULL,
+  `telephone` varchar(50) DEFAULT NULL,
+  `is_verified` tinyint NOT NULL,
+  `date_inscription` datetime NOT NULL,
+  `token_confirmation` varchar(100) DEFAULT NULL,
+  `image_name` varchar(255) DEFAULT NULL,
+  `image_size` int DEFAULT NULL,
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `UNIQ_IDENTIFIER_EMAIL` (`email`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `users`
+--
+
+LOCK TABLES `users` WRITE;
+/*!40000 ALTER TABLE `users` DISABLE KEYS */;
+INSERT INTO `users` VALUES (3,'admin@fitbook.com','[\"ROLE_ADMIN\"]','$2y$13$Dc8mc//7AHav6FUx98aRZ..2BasCkpBsc/dT0OTIso8AjwPerndqK ','Admin','FitBook',NULL,1,'2026-10-30 01:38:31',NULL,NULL,NULL,'2026-10-30 01:38:31','2026-10-30 01:38:31');
+/*!40000 ALTER TABLE `users` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Dumping routines for database 'fitbook'
+--
+/*!50003 DROP PROCEDURE IF EXISTS `sp_note_moyenne_salle` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_unicode_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'NO_AUTO_VALUE_ON_ZERO' */ ;
+DELIMITER ;;
+CREATE DEFINER=`fitbook_hajar`@`localhost` PROCEDURE `sp_note_moyenne_salle`(IN p_salle_id INT)
+BEGIN
+    SELECT p_salle_id AS salle_id,
+           COALESCE(ROUND(AVG(note), 2), 0) AS note_moyenne,
+           COUNT(*) AS nombre_avis
+    FROM avis
+    WHERE salle_id = p_salle_id AND statut_moderation = 'valide';
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `sp_places_restantes` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_unicode_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'NO_AUTO_VALUE_ON_ZERO' */ ;
+DELIMITER ;;
+CREATE DEFINER=`fitbook_hajar`@`localhost` PROCEDURE `sp_places_restantes`(IN p_seance_id INT)
+BEGIN
+    SELECT s.id,
+           s.capacite_max,
+           COUNT(r.id) AS reservations_confirmees,
+           s.capacite_max - COUNT(r.id) AS places_restantes
+    FROM seances s
+    LEFT JOIN reservations r ON r.seance_id = s.id AND r.statut = 'confirmee'
+    WHERE s.id = p_seance_id
+    GROUP BY s.id, s.capacite_max;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `sp_reservations_utilisateur` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_unicode_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'NO_AUTO_VALUE_ON_ZERO' */ ;
+DELIMITER ;;
+CREATE DEFINER=`fitbook_hajar`@`localhost` PROCEDURE `sp_reservations_utilisateur`(IN p_user_id INT)
+BEGIN
+    SELECT r.id, r.statut, r.date_reservation,
+           se.date_seance, se.heure_debut, se.heure_fin,
+           c.nom AS cours, sa.nom AS salles
+    FROM reservations r
+    JOIN seances se ON se.id = r.seance_id
+    JOIN cours c ON c.id = se.cours_id
+    JOIN salles sa ON sa.id = se.salle_id
+    WHERE r.user_id = p_user_id
+    ORDER BY se.date_seance DESC;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -465,4 +562,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2026-10-27 16:09:38
+-- Dump completed on 2026-10-30  1:49:31
