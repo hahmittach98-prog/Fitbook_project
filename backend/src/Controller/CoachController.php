@@ -24,6 +24,8 @@ class CoachController extends AbstractController
             'description' => $c->getDescription(),
             'tarifHoraire' => $c->getTarifHoraire(),
             'photo' => $c->getPhoto(),
+            'imageName' => $c->getImageName(),
+            'modifieLe' => $c->getUpdatedAt()?->format('Y-m-d H:i'),
         ];
     }
 
@@ -100,5 +102,21 @@ class CoachController extends AbstractController
         $em->flush();
 
         return $this->json(null, Response::HTTP_NO_CONTENT);
+    }
+
+        #[Route('/{id}/image', name: 'api_coach_image', methods: ['POST'])]
+    public function image(Coach $coach, Request $request, EntityManagerInterface $em): JsonResponse
+    {
+        if ($coach->getUser() !== $this->getUser() && !$this->isGranted('ROLE_ADMIN')) {
+            return $this->json(['erreur' => 'Accès refusé'], Response::HTTP_FORBIDDEN);
+        }
+        $file = $request->files->get('image');
+        if (!$file) {
+            return $this->json(['erreur' => 'Fichier "image" requis'], Response::HTTP_BAD_REQUEST);
+        }
+        $coach->setImageFile($file);
+        $em->flush();
+
+        return $this->json(['imageName' => $coach->getImageName()], Response::HTTP_CREATED);
     }
 }

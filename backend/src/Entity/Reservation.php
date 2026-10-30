@@ -2,15 +2,20 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Metadata\ApiResource;
+use App\Entity\Traits\Timestampable; 
 use App\Repository\ReservationRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ApiResource]
+
 #[ORM\Table(name: "reservations")]
 #[ORM\Entity(repositoryClass: ReservationRepository::class)]
+#[ORM\HasLifecycleCallbacks]  
+
 class Reservation
 {
+
+use Timestampable;   
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]

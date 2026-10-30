@@ -8,6 +8,7 @@ use App\Repository\CoursRepository;
 use App\Repository\SalleRepository;
 use App\Validator\JsonSchemaValidator;
 use App\Repository\SeanceRepository;
+use Doctrine\DBAL\Connection;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -33,6 +34,8 @@ class SeanceController extends AbstractController
             'coursNom' => $s->getCours()?->getNom(),
             'salleId' => $s->getSalle()?->getId(),
             'salleNom' => $s->getSalle()?->getNom(),
+            'modifieLe' => $s->getUpdatedAt()?->format('Y-m-d H:i'),
+
         ];
     }
 
@@ -131,5 +134,14 @@ class SeanceController extends AbstractController
         $em->flush();
 
         return $this->json(null, Response::HTTP_NO_CONTENT);
+    }
+
+        #[Route('/{id}/places', name: 'api_seance_places', methods: ['GET'])]
+
+    public function places(int $id, Connection $connection): JsonResponse
+    {
+        $res = $connection->executeQuery('CALL sp_places_restantes(:id)', ['id' => $id])->fetchAssociative();
+
+        return $this->json($res ?: ['erreur' => 'Séance introuvable']);
     }
 }

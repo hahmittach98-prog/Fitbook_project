@@ -28,6 +28,8 @@ class SalleController extends AbstractController
             'description' => $s->getDescription(),
             'photo' => $s->getPhoto(),
             'gestionnaireId' => $s->getGestionnaire()?->getId(),
+            'imageName' => $s->getImageName(),
+            'modifieLe' => $s->getUpdatedAt()?->format('Y-m-d H:i'),
         ];
     }
 
@@ -182,4 +184,22 @@ class SalleController extends AbstractController
 
         return $this->json(null, Response::HTTP_NO_CONTENT);
     }
+
+    
+        #[Route('/{id}/image', name: 'api_salle_image', methods: ['POST'])]
+    public function image(Salle $salle, Request $request, EntityManagerInterface $em): JsonResponse
+    {
+        if ($salle->getGestionnaire() !== $this->getUser() && !$this->isGranted('ROLE_ADMIN')) {
+            return $this->json(['erreur' => 'Accès refusé'], Response::HTTP_FORBIDDEN);
+        }
+        $file = $request->files->get('image');
+        if (!$file) {
+            return $this->json(['erreur' => 'Fichier "image" requis'], Response::HTTP_BAD_REQUEST);
+        }
+        $salle->setImageFile($file);
+        $em->flush();
+
+        return $this->json(['imageName' => $salle->getImageName()], Response::HTTP_CREATED);
+    }
+
 }

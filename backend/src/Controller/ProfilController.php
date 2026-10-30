@@ -7,6 +7,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
 #[Route('/api/profil')]
@@ -25,6 +26,9 @@ class ProfilController extends AbstractController
             'prenom' => $user->getPrenom(),
             'telephone' => $user->getTelephone(),
             'roles' => $user->getRoles(),
+            'imageName' => $user->getImageName(),
+            'creeLe' => $user->getCreatedAt()?->format('Y-m-d H:i'),
+            'modifieLe' => $user->getUpdatedAt()?->format('Y-m-d H:i'),
         ]);
     }
 
@@ -47,5 +51,20 @@ class ProfilController extends AbstractController
         $em->flush();
 
         return $this->json(['message' => 'Profil mis à jour']);
+    }
+
+        #[Route('/image', name: 'api_profil_image', methods: ['POST'])]
+    public function image(Request $request, EntityManagerInterface $em): JsonResponse
+    {
+        $file = $request->files->get('image');
+        if (!$file) {
+            return $this->json(['erreur' => 'Fichier "image" requis'], Response::HTTP_BAD_REQUEST);
+        }
+        /** @var User $user */
+        $user = $this->getUser();
+        $user->setImageFile($file);
+        $em->flush();
+
+        return $this->json(['imageName' => $user->getImageName()], Response::HTTP_CREATED);
     }
 }
