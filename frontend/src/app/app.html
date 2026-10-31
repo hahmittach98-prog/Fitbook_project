@@ -3,8 +3,10 @@
   <a routerLink="/salles">Salles</a>
   <a routerLink="/coachs">Coachs</a>
   <a routerLink="/cours">Cours</a>
+  <a routerLink="/seances">Séances</a>
 
     @if (api.connecte()) {
+    <a routerLink="/reservations">Mes réservations</a>
     <a routerLink="/profil">Profil</a>
     <button type="button" (click)="deconnexion()">Déconnexion</button>
   } @else {

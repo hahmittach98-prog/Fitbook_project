@@ -24,6 +24,22 @@ export class Api {
     return this.http.get<any>(`${API}/profil`);
   }
 
+    getSeances(): Observable<any[]> {
+    return this.http.get<any[]>(`${API}/seances`);
+  }
+
+  reserver(seanceId: number): Observable<any> {
+    return this.http.post<any>(`${API}/reservations`, { seanceId });
+  }
+
+  getReservations(): Observable<any[]> {
+    return this.http.get<any[]>(`${API}/reservations`);
+  }
+
+  annulerReservation(id: number): Observable<any> {
+    return this.http.delete<any>(`${API}/reservations/${id}`);
+  }
+
   login(email: string, password: string): Observable<{ token: string }> {
     return this.http.post<{ token: string }>(`${API}/login`, { email, password }).pipe(
       tap((reponse) => {

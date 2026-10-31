@@ -5,6 +5,8 @@ import { Inscription } from './pages/inscription/inscription';
 import { Coachs } from './pages/coachs/coachs';
 import { Cours } from './pages/cours/cours';
 import { Profil } from './pages/profil/profil';
+import { Seances } from './pages/seances/seances';
+import { Reservations } from './pages/reservations/reservations';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'salles', pathMatch: 'full' },
@@ -13,5 +15,7 @@ export const routes: Routes = [
   { path: 'inscription', component: Inscription },
   { path: 'coachs', component: Coachs },
   { path: 'cours', component: Cours },
-  { path: 'profil', component: Profil }
+  { path: 'profil', component: Profil },
+  { path: 'seances', component: Seances },
+  { path: 'reservations', component: Reservations }
 ];
