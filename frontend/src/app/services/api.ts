@@ -18,6 +18,10 @@ export class Api {
     );
   }
 
+  register(donnees: any): Observable<{ message: string; id: number }> {
+    return this.http.post<{ message: string; id: number }>(`${API}/register`, donnees);
+  }
+
   estConnecte(): boolean {
     return !!localStorage.getItem('token');
   }

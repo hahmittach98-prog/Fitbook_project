@@ -1,0 +1,35 @@
+<h1>Inscription</h1>
+
+<form (ngSubmit)="envoyer()">
+  <label>Nom
+    <input type="text" name="nom" [(ngModel)]="nom" required>
+  </label>
+  <label>Prénom
+    <input type="text" name="prenom" [(ngModel)]="prenom" required>
+  </label>
+  <label>Email
+    <input type="email" name="email" [(ngModel)]="email" required>
+  </label>
+  <label>Mot de passe (8 caractères minimum)
+    <input type="password" name="password" [(ngModel)]="password" required minlength="8">
+  </label>
+  <label>Téléphone (facultatif)
+    <input type="text" name="telephone" [(ngModel)]="telephone">
+  </label>
+  <label>Je suis
+    <select name="role" [(ngModel)]="role">
+      <option value="sportif">Sportif</option>
+      <option value="coach">Coach</option>
+      <option value="salle">Gérant de salle</option>
+    </select>
+  </label>
+
+  @if (erreur()) {
+    <p class="erreur">{{ erreur() }}</p>
+  }
+  @if (message()) {
+    <p class="succes">{{ message() }}</p>
+  }
+
+  <button type="submit">Créer mon compte</button>
+</form>
