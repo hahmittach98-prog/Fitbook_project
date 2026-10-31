@@ -1,0 +1,17 @@
+<h1>Nos cours</h1>
+
+@if (erreur()) {
+  <p class="erreur">{{ erreur() }}</p>
+}
+
+<div class="liste">
+  @for (c of cours(); track c.id) {
+    <div class="carte">
+      <h2>{{ c.nom }}</h2>
+      <p>Niveau : {{ c.niveau }}</p>
+      <p>{{ c.description }}</p>
+    </div>
+  } @empty {
+    <p>Aucun cours pour le moment.</p>
+  }
+</div>
