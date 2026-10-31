@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "required": ["date", "heureDebut", "heureFin", "capaciteMax", "prix", "coachId", "coursId", "salleId"],
+  "properties": {
+    "date": { "type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}$" },
+    "heureDebut": { "type": "string", "pattern": "^([01]\\d|2[0-3]):[0-5]\\d$" },
+    "heureFin": { "type": "string", "pattern": "^([01]\\d|2[0-3]):[0-5]\\d$" },
+    "capaciteMax": { "type": "integer", "minimum": 1 },
+    "prix": { "type": "number", "minimum": 0 },
+    "coachId": { "type": "integer", "minimum": 1 },
+    "coursId": { "type": "integer", "minimum": 1 },
+    "salleId": { "type": "integer", "minimum": 1 }
+  },
+  "additionalProperties": false
+}

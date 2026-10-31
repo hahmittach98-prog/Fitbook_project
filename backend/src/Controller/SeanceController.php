@@ -6,7 +6,9 @@ use App\Entity\Seance;
 use App\Repository\CoachRepository;
 use App\Repository\CoursRepository;
 use App\Repository\SalleRepository;
+use App\Validator\JsonSchemaValidator;
 use App\Repository\SeanceRepository;
+use Doctrine\DBAL\Connection;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -32,6 +34,8 @@ class SeanceController extends AbstractController
             'coursNom' => $s->getCours()?->getNom(),
             'salleId' => $s->getSalle()?->getId(),
             'salleNom' => $s->getSalle()?->getNom(),
+            'modifieLe' => $s->getUpdatedAt()?->format('Y-m-d H:i'),
+
         ];
     }
 
@@ -47,7 +51,7 @@ class SeanceController extends AbstractController
             $prixMax !== null ? (float) $prixMax : null
         );
 
-        return $this->json(array_map(fn ($s) => $this->toArray($s), $liste));
+        return $this->json(array_map(fn($s) => $this->toArray($s), $liste));
     }
 
     #[Route('/{id}', name: 'api_seance_show', methods: ['GET'])]
@@ -62,18 +66,21 @@ class SeanceController extends AbstractController
         EntityManagerInterface $em,
         CoachRepository $coachs,
         CoursRepository $cours,
-        SalleRepository $salles
+        SalleRepository $salles,
+        JsonSchemaValidator $schema
     ): JsonResponse {
         if (!$this->isGranted('ROLE_COACH') && !$this->isGranted('ROLE_SALLE')) {
             return $this->json(['erreur' => 'Accès refusé'], Response::HTTP_FORBIDDEN);
         }
         $d = json_decode($request->getContent(), true) ?? [];
 
-        foreach (['date', 'heureDebut', 'heureFin', 'capaciteMax', 'prix', 'coachId', 'coursId', 'salleId'] as $champ) {
-            if (!isset($d[$champ]) || $d[$champ] === '') {
-                return $this->json(['erreur' => "Champ requis : $champ"], Response::HTTP_UNPROCESSABLE_ENTITY);
-            }
+        $erreurs = $schema->validate($d, 'seance');
+        if ($erreurs) {
+            return $this->json(['erreurs' => $erreurs], Response::HTTP_UNPROCESSABLE_ENTITY);
         }
+
+
+
 
         $coach = $coachs->find($d['coachId']);
         $cours = $cours->find($d['coursId']);
@@ -112,12 +119,24 @@ class SeanceController extends AbstractController
         }
         $d = json_decode($request->getContent(), true) ?? [];
 
-        if (isset($d['date'])) { $seance->setDateSeance(new \DateTimeImmutable($d['date'])); }
-        if (isset($d['heureDebut'])) { $seance->setHeureDebut(new \DateTimeImmutable($d['heureDebut'])); }
-        if (isset($d['heureFin'])) { $seance->setHeureFin(new \DateTimeImmutable($d['heureFin'])); }
-        if (isset($d['capaciteMax']) && (int) $d['capaciteMax'] > 0) { $seance->setCapaciteMax((int) $d['capaciteMax']); }
-        if (isset($d['prix'])) { $seance->setPrix((float) $d['prix']); }
-        if (isset($d['statut'])) { $seance->setStatut($d['statut']); }
+        if (isset($d['date'])) {
+            $seance->setDateSeance(new \DateTimeImmutable($d['date']));
+        }
+        if (isset($d['heureDebut'])) {
+            $seance->setHeureDebut(new \DateTimeImmutable($d['heureDebut']));
+        }
+        if (isset($d['heureFin'])) {
+            $seance->setHeureFin(new \DateTimeImmutable($d['heureFin']));
+        }
+        if (isset($d['capaciteMax']) && (int) $d['capaciteMax'] > 0) {
+            $seance->setCapaciteMax((int) $d['capaciteMax']);
+        }
+        if (isset($d['prix'])) {
+            $seance->setPrix((float) $d['prix']);
+        }
+        if (isset($d['statut'])) {
+            $seance->setStatut($d['statut']);
+        }
         $em->flush();
 
         return $this->json($this->toArray($seance));
@@ -133,5 +152,14 @@ class SeanceController extends AbstractController
         $em->flush();
 
         return $this->json(null, Response::HTTP_NO_CONTENT);
+    }
+
+    #[Route('/{id}/places', name: 'api_seance_places', methods: ['GET'])]
+
+    public function places(int $id, Connection $connection): JsonResponse
+    {
+        $res = $connection->executeQuery('CALL sp_places_restantes(:id)', ['id' => $id])->fetchAssociative();
+
+        return $this->json($res ?: ['erreur' => 'Séance introuvable']);
     }
 }

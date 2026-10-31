@@ -4,6 +4,8 @@ namespace App\Controller;
 
 use App\Entity\Salle;
 use App\Repository\SalleRepository;
+use App\Repository\CoachRepository;
+use App\Repository\CoursRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -26,6 +28,8 @@ class SalleController extends AbstractController
             'description' => $s->getDescription(),
             'photo' => $s->getPhoto(),
             'gestionnaireId' => $s->getGestionnaire()?->getId(),
+            'imageName' => $s->getImageName(),
+            'modifieLe' => $s->getUpdatedAt()?->format('Y-m-d H:i'),
         ];
     }
 
@@ -109,4 +113,93 @@ class SalleController extends AbstractController
 
         return $this->json(null, Response::HTTP_NO_CONTENT);
     }
+
+        #[Route('/{id}/cours', name: 'api_salle_cours_list', methods: ['GET'])]
+    public function listCours(Salle $salle): JsonResponse
+    {
+        return $this->json(array_map(
+            fn ($c) => ['id' => $c->getId(), 'nom' => $c->getNom(), 'niveau' => $c->getNiveau()],
+            $salle->getCours()->toArray()
+        ));
+    }
+
+    #[Route('/{id}/cours/{coursId}', name: 'api_salle_cours_add', methods: ['POST'])]
+    public function addCours(Salle $salle, int $coursId, CoursRepository $repo, EntityManagerInterface $em): JsonResponse
+    {
+        if ($salle->getGestionnaire() !== $this->getUser() && !$this->isGranted('ROLE_ADMIN')) {
+            return $this->json(['erreur' => 'Accès refusé'], Response::HTTP_FORBIDDEN);
+        }
+        $cours = $repo->find($coursId);
+        if (!$cours) {
+            return $this->json(['erreur' => 'Cours introuvable'], Response::HTTP_NOT_FOUND);
+        }
+        $salle->addCours($cours);
+        $em->flush();
+
+        return $this->json(['message' => 'Cours ajouté à la salle'], Response::HTTP_CREATED);
+    }
+
+    #[Route('/{id}/cours/{coursId}', name: 'api_salle_cours_remove', methods: ['DELETE'])]
+    public function removeCours(Salle $salle, int $coursId, CoursRepository $repo, EntityManagerInterface $em): JsonResponse
+    {
+        if ($salle->getGestionnaire() !== $this->getUser() && !$this->isGranted('ROLE_ADMIN')) {
+            return $this->json(['erreur' => 'Accès refusé'], Response::HTTP_FORBIDDEN);
+        }
+        $cours = $repo->find($coursId);
+        if ($cours) {
+            $salle->removeCours($cours);
+            $em->flush();
+        }
+
+        return $this->json(null, Response::HTTP_NO_CONTENT);
+    }
+
+    #[Route('/{id}/coachs/{coachId}', name: 'api_salle_coach_add', methods: ['POST'])]
+    public function addCoach(Salle $salle, int $coachId, CoachRepository $repo, EntityManagerInterface $em): JsonResponse
+    {
+        if ($salle->getGestionnaire() !== $this->getUser() && !$this->isGranted('ROLE_ADMIN')) {
+            return $this->json(['erreur' => 'Accès refusé'], Response::HTTP_FORBIDDEN);
+        }
+        $coach = $repo->find($coachId);
+        if (!$coach) {
+            return $this->json(['erreur' => 'Coach introuvable'], Response::HTTP_NOT_FOUND);
+        }
+        $salle->addCoach($coach);
+        $em->flush();
+
+        return $this->json(['message' => 'Coach ajouté à la salle'], Response::HTTP_CREATED);
+    }
+
+    #[Route('/{id}/coachs/{coachId}', name: 'api_salle_coach_remove', methods: ['DELETE'])]
+    public function removeCoach(Salle $salle, int $coachId, CoachRepository $repo, EntityManagerInterface $em): JsonResponse
+    {
+        if ($salle->getGestionnaire() !== $this->getUser() && !$this->isGranted('ROLE_ADMIN')) {
+            return $this->json(['erreur' => 'Accès refusé'], Response::HTTP_FORBIDDEN);
+        }
+        $coach = $repo->find($coachId);
+        if ($coach) {
+            $salle->removeCoach($coach);
+            $em->flush();
+        }
+
+        return $this->json(null, Response::HTTP_NO_CONTENT);
+    }
+
+    
+        #[Route('/{id}/image', name: 'api_salle_image', methods: ['POST'])]
+    public function image(Salle $salle, Request $request, EntityManagerInterface $em): JsonResponse
+    {
+        if ($salle->getGestionnaire() !== $this->getUser() && !$this->isGranted('ROLE_ADMIN')) {
+            return $this->json(['erreur' => 'Accès refusé'], Response::HTTP_FORBIDDEN);
+        }
+        $file = $request->files->get('image');
+        if (!$file) {
+            return $this->json(['erreur' => 'Fichier "image" requis'], Response::HTTP_BAD_REQUEST);
+        }
+        $salle->setImageFile($file);
+        $em->flush();
+
+        return $this->json(['imageName' => $salle->getImageName()], Response::HTTP_CREATED);
+    }
+
 }

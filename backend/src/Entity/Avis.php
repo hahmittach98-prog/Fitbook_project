@@ -6,6 +6,9 @@ use App\Repository\AvisRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
+
+
+#[ORM\Table(name: "avis")]
 #[ORM\Entity(repositoryClass: AvisRepository::class)]
 class Avis
 {

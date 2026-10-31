@@ -1,0 +1,832 @@
+{
+  "info": {
+    "_postman_id": "573bd17d-792e-4015-973d-0cf724fee992",
+    "name": "FitBook_API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "56644012",
+    "_collection_link": "https://go.postman.co/collection/56644012-573bd17d-792e-4015-973d-0cf724fee992?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Liste des salles",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"200 OK\", function(){ pm.response.to.have.status(200); });"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{url}}/api/salles",
+          "host": [
+            "{{url}}"
+          ],
+          "path": [
+            "api",
+            "salles"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Liste des cours",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"200 OK\", function(){ pm.response.to.have.status(200); });"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{url}}/api/cours",
+          "host": [
+            "{{url}}"
+          ],
+          "path": [
+            "api",
+            "cours"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Liste des coachs",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"200 OK\", function(){ pm.response.to.have.status(200); });"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{url}}/api/coachs",
+          "host": [
+            "{{url}}"
+          ],
+          "path": [
+            "api",
+            "coachs"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Login admin",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"200 login admin\", function(){\r",
+              "  pm.response.to.have.status(200);\r",
+              "  pm.environment.set(\"tokenAdmin\", pm.response.json().token);\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{ \"email\": \"{{adminEmail}}\", \"password\": \"{{adminPassword}}\" }",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{url}}/api/login",
+          "host": [
+            "{{url}}"
+          ],
+          "path": [
+            "api",
+            "login"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Inscription coach",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              "pm.environment.set(\"coachEmail\", \"coach\" + Date.now() + \"@test.com\");"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"201 inscription\", function(){\r",
+              "  pm.response.to.have.status(201);\r",
+              "  pm.environment.set(\"coachUserId\", pm.response.json().id);\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{ \"email\": \"{{coachEmail}}\", \"password\": \"motdepasse123\", \"nom\": \"Test\", \"prenom\": \"Coach\", \"role\": \"coach\" }",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{url}}/api/register",
+          "host": [
+            "{{url}}"
+          ],
+          "path": [
+            "api",
+            "register"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Vérifier coach",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"200 vérification\", function(){ pm.response.to.have.status(200); });"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{tokenAdmin}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "PUT",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{ \"email\": \"{{coachEmail}}\", \"password\": \"motdepasse123\", \"nom\": \"Test\", \"prenom\": \"Coach\", \"role\": \"coach\" }"
+        },
+        "url": {
+          "raw": "{{url}}/api/admin/users/{{coachUserId}}/verify",
+          "host": [
+            "{{url}}"
+          ],
+          "path": [
+            "api",
+            "admin",
+            "users",
+            "{{coachUserId}}",
+            "verify"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Login coach",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"200 login coach\", function(){\r",
+              "  pm.response.to.have.status(200);\r",
+              "  pm.environment.set(\"tokenCoach\", pm.response.json().token);\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{ \"email\": \"{{coachEmail}}\", \"password\": \"motdepasse123\" }",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{url}}/api/login",
+          "host": [
+            "{{url}}"
+          ],
+          "path": [
+            "api",
+            "login"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Mon profil",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"200 profil\", function(){ pm.response.to.have.status(200); });"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{tokenCoach}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{ \"email\": \"{{coachEmail}}\", \"password\": \"motdepasse123\" }"
+        },
+        "url": {
+          "raw": "{{url}}/api/profil",
+          "host": [
+            "{{url}}"
+          ],
+          "path": [
+            "api",
+            "profil"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Créer une salle",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"201 salle créée\", function(){\r",
+              "  pm.response.to.have.status(201);\r",
+              "  pm.environment.set(\"salleId\", pm.response.json().id);\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{tokenAdmin}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{ \"nom\": \"Salle Test\", \"ville\": \"Bruxelles\", \"adresse\": \"1 rue du Test\", \"capacite\": 30, \"telephone\": \"0470000000\", \"description\": \"Salle de test\" }",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{url}}/api/salles",
+          "host": [
+            "{{url}}"
+          ],
+          "path": [
+            "api",
+            "salles"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Créer un cours",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"201 cours créé\", function(){\r",
+              "  pm.response.to.have.status(201);\r",
+              "  pm.environment.set(\"coursId\", pm.response.json().id);\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{tokenAdmin}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{ \"nom\": \"Yoga\", \"niveau\": \"debutant\", \"description\": \"Cours de yoga\" }",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{url}}/api/cours",
+          "host": [
+            "{{url}}"
+          ],
+          "path": [
+            "api",
+            "cours"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Créer le profil coach",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"201 coach créé\", function(){\r",
+              "  pm.response.to.have.status(201);\r",
+              "  pm.environment.set(\"coachId\", pm.response.json().id);\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{tokenCoach}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{ \"specialite\": \"Yoga\", \"description\": \"Coach de test\", \"tarifHoraire\": 40 }",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{url}}/api/coachs",
+          "host": [
+            "{{url}}"
+          ],
+          "path": [
+            "api",
+            "coachs"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Créer une séance",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"201 séance créée\", function(){\r",
+              "  pm.response.to.have.status(201);\r",
+              "  pm.environment.set(\"seanceId\", pm.response.json().id);\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{tokenAdmin}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{ \"date\": \"2026-12-01\", \"heureDebut\": \"10:00\", \"heureFin\": \"11:00\", \"capaciteMax\": 10, \"prix\": 15, \"coachId\": {{coachId}}, \"coursId\": {{coursId}}, \"salleId\": {{salleId}} }",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{url}}/api/seances",
+          "host": [
+            "{{url}}"
+          ],
+          "path": [
+            "api",
+            "seances"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Places restantes",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"200 places\", function(){ pm.response.to.have.status(200); });"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{tokenAdmin}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{ \"date\": \"2026-12-01\", \"heureDebut\": \"10:00\", \"heureFin\": \"11:00\", \"capaciteMax\": 10, \"prix\": 15, \"coachId\": {{coachId}}, \"coursId\": {{coursId}}, \"salleId\": {{salleId}} }"
+        },
+        "url": {
+          "raw": "{{url}}/api/seances/{{seanceId}}/places",
+          "host": [
+            "{{url}}"
+          ],
+          "path": [
+            "api",
+            "seances",
+            "{{seanceId}}",
+            "places"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Modifier la séance",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"200 modification\", function(){ pm.response.to.have.status(200); });"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{tokenAdmin}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "PUT",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{ \"prix\": 20 }",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{url}}/api/seances/{{seanceId}}",
+          "host": [
+            "{{url}}"
+          ],
+          "path": [
+            "api",
+            "seances",
+            "{{seanceId}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Validation refusée",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"422 validation\", function(){ pm.response.to.have.status(422); });"
+            ]
+          }
+        },
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              ""
+            ]
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{tokenAdmin}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{ \"date\": \"2026-12-01\", \"heureDebut\": \"10:00\", \"heureFin\": \"11:00\", \"capaciteMax\": 10, \"prix\": -5, \"coachId\": {{coachId}}, \"coursId\": {{coursId}}, \"salleId\": {{salleId}} }",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{url}}/api/seances",
+          "host": [
+            "{{url}}"
+          ],
+          "path": [
+            "api",
+            "seances"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Sans token",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"401 sans token\", function(){ pm.response.to.have.status(401); });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{url}}/api/profil",
+          "host": [
+            "{{url}}"
+          ],
+          "path": [
+            "api",
+            "profil"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Supprimer la séance",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"séance supprimée\", function(){ pm.expect(pm.response.code).to.be.oneOf([200,204]); });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{tokenAdmin}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{url}}/api/seances/{{seanceId}}",
+          "host": [
+            "{{url}}"
+          ],
+          "path": [
+            "api",
+            "seances",
+            "{{seanceId}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Supprimer le coach",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"utilisateur supprimé\", function(){ pm.expect(pm.response.code).to.be.oneOf([200,204]); });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{tokenAdmin}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "DELETE",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{ \"email\": \"{{coachEmail}}\", \"password\": \"motdepasse123\", \"nom\": \"Test\", \"prenom\": \"Coach\", \"role\": \"coach\" }",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{url}}/api/admin/users/{{coachUserId}}",
+          "host": [
+            "{{url}}"
+          ],
+          "path": [
+            "api",
+            "admin",
+            "users",
+            "{{coachUserId}}"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}

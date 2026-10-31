@@ -2,13 +2,20 @@
 
 namespace App\Entity;
 
+
 use App\Repository\SeanceRepository;
+use App\Entity\Traits\Timestampable; 
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
+#[ORM\Table(name: "seances")]
 #[ORM\Entity(repositoryClass: SeanceRepository::class)]
+#[ORM\HasLifecycleCallbacks]  
+
 class Seance
 {
+    use Timestampable;   
+    
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]

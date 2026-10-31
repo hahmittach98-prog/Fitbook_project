@@ -2,10 +2,13 @@
 
 namespace App\Entity;
 
+
 use App\Repository\CoursRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
+
+#[ORM\Table(name: "cours")]
 #[ORM\Entity(repositoryClass: CoursRepository::class)]
 class Cours
 {

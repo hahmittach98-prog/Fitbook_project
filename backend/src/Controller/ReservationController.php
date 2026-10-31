@@ -27,6 +27,7 @@ class ReservationController extends AbstractController
             'seanceId' => $r->getSeance()?->getId(),
             'cours' => $r->getSeance()?->getCours()?->getNom(),
             'dateSeance' => $r->getSeance()?->getDateSeance()?->format('Y-m-d'),
+            'creeLe' => $r->getCreatedAt()?->format('Y-m-d H:i'),
         ];
     }
 

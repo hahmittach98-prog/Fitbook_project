@@ -2,20 +2,42 @@
 
 namespace App\Entity;
 
+
 use App\Repository\SalleRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use App\Entity\Traits\Timestampable; 
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\File\File;
+use Vich\UploaderBundle\Mapping\Attribute as Vich;
 
+
+#[ORM\Table(name: "salles")]
 #[ORM\Entity(repositoryClass: SalleRepository::class)]
+#[Vich\Uploadable]
+#[ORM\HasLifecycleCallbacks]  
+
 class Salle
 {
+
+use Timestampable;   
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
+     #[Vich\UploadableField(mapping: 'salles', fileNameProperty: 'imageName', size: 'imageSize')]
+    private ?File $imageFile = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?string $imageName = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $imageSize = null;
+
+    
     #[ORM\Column(length: 255)]
     private ?string $nom = null;
 
@@ -168,18 +190,18 @@ class Salle
         return $this->cours;
     }
 
-    public function addCour(Cours $cour): static
+    public function addCours(Cours $cours): static
     {
-        if (!$this->cours->contains($cour)) {
-            $this->cours->add($cour);
+        if (!$this->cours->contains($cours)) {
+            $this->cours->add($cours);
         }
 
         return $this;
     }
 
-    public function removeCour(Cours $cour): static
+    public function removeCours(Cours $cours): static
     {
-        $this->cours->removeElement($cour);
+        $this->cours->removeElement($cours);
 
         return $this;
     }
@@ -206,5 +228,38 @@ class Salle
         $this->coachs->removeElement($coach);
 
         return $this;
+    }
+     public function setImageFile(?File $imageFile = null): void
+    {
+        $this->imageFile = $imageFile;
+        if (null !== $imageFile) {
+            $this->updatedAt = new \DateTimeImmutable();
+        }
+    }
+    public function getImageFile(): ?File {
+
+         return $this->imageFile; 
+         }
+
+    public function setImageName(?string $imageName): void { 
+        $this->imageName = $imageName;
+         }
+
+    public function getImageName(): ?string { 
+        
+    return $this->imageName; 
+    
+    }
+
+    public function setImageSize(?int $imageSize): void { 
+        
+    $this->imageSize = $imageSize; 
+    
+    }
+
+    public function getImageSize(): ?int {
+        
+    return $this->imageSize;
+    
     }
 }

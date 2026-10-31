@@ -2,10 +2,13 @@
 
 namespace App\Entity;
 
+
 use App\Repository\DisponibiliteRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
+
+#[ORM\Table(name: "disponibilites")]
 #[ORM\Entity(repositoryClass: DisponibiliteRepository::class)]
 class Disponibilite
 {
