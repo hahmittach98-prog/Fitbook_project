@@ -20,6 +20,9 @@ export class Api {
   getCours(): Observable<any[]> {
     return this.http.get<any[]>(`${API}/cours`);
   }
+    getProfil(): Observable<any> {
+    return this.http.get<any>(`${API}/profil`);
+  }
 
   login(email: string, password: string): Observable<{ token: string }> {
     return this.http.post<{ token: string }>(`${API}/login`, { email, password }).pipe(

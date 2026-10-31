@@ -4,7 +4,8 @@
   <a routerLink="/coachs">Coachs</a>
   <a routerLink="/cours">Cours</a>
 
-  @if (api.connecte()) {
+    @if (api.connecte()) {
+    <a routerLink="/profil">Profil</a>
     <button type="button" (click)="deconnexion()">Déconnexion</button>
   } @else {
     <a routerLink="/connexion">Connexion</a>
