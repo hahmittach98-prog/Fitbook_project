@@ -13,6 +13,13 @@ export class Api {
   getSalles(): Observable<any[]> {
     return this.http.get<any[]>(`${API}/salles`);
   }
+    getCoachs(): Observable<any[]> {
+    return this.http.get<any[]>(`${API}/coachs`);
+  }
+
+  getCours(): Observable<any[]> {
+    return this.http.get<any[]>(`${API}/cours`);
+  }
 
   login(email: string, password: string): Observable<{ token: string }> {
     return this.http.post<{ token: string }>(`${API}/login`, { email, password }).pipe(

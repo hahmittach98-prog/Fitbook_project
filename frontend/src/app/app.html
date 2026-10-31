@@ -1,6 +1,8 @@
 <nav>
   <a routerLink="/salles" class="logo">FitBook</a>
   <a routerLink="/salles">Salles</a>
+  <a routerLink="/coachs">Coachs</a>
+  <a routerLink="/cours">Cours</a>
 
   @if (api.connecte()) {
     <button type="button" (click)="deconnexion()">Déconnexion</button>

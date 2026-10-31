@@ -1,0 +1,18 @@
+<h1>Nos coachs</h1>
+
+@if (erreur()) {
+  <p class="erreur">{{ erreur() }}</p>
+}
+
+<div class="liste">
+  @for (c of coachs(); track c.id) {
+    <div class="carte">
+      <h2>{{ c.prenom }} {{ c.nom }}</h2>
+      <p>{{ c.specialite }}</p>
+      <p>{{ c.description }}</p>
+      <p>Tarif : {{ c.tarifHoraire }} € / heure</p>
+    </div>
+  } @empty {
+    <p>Aucun coach pour le moment.</p>
+  }
+</div>
