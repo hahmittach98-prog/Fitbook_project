@@ -1,0 +1,17 @@
+<h1>Nos salles</h1>
+
+@if (erreur()) {
+  <p class="erreur">{{ erreur() }}</p>
+}
+
+<div class="liste">
+  @for (s of salles(); track s.id) {
+    <div class="carte">
+      <h2>{{ s.nom }}</h2>
+      <p>{{ s.ville }} · {{ s.adresse }}</p>
+      <p>Capacité : {{ s.capacite }}</p>
+    </div>
+  } @empty {
+    <p>Aucune salle pour le moment.</p>
+  }
+</div>
