@@ -51,7 +51,7 @@ class SeanceController extends AbstractController
             $prixMax !== null ? (float) $prixMax : null
         );
 
-        return $this->json(array_map(fn ($s) => $this->toArray($s), $liste));
+        return $this->json(array_map(fn($s) => $this->toArray($s), $liste));
     }
 
     #[Route('/{id}', name: 'api_seance_show', methods: ['GET'])]
@@ -73,8 +73,14 @@ class SeanceController extends AbstractController
             return $this->json(['erreur' => 'Accès refusé'], Response::HTTP_FORBIDDEN);
         }
         $d = json_decode($request->getContent(), true) ?? [];
-        
-        
+
+        $erreurs = $schema->validate($d, 'seance');
+        if ($erreurs) {
+            return $this->json(['erreurs' => $erreurs], Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+
+
+
 
         $coach = $coachs->find($d['coachId']);
         $cours = $cours->find($d['coursId']);
@@ -113,12 +119,24 @@ class SeanceController extends AbstractController
         }
         $d = json_decode($request->getContent(), true) ?? [];
 
-        if (isset($d['date'])) { $seance->setDateSeance(new \DateTimeImmutable($d['date'])); }
-        if (isset($d['heureDebut'])) { $seance->setHeureDebut(new \DateTimeImmutable($d['heureDebut'])); }
-        if (isset($d['heureFin'])) { $seance->setHeureFin(new \DateTimeImmutable($d['heureFin'])); }
-        if (isset($d['capaciteMax']) && (int) $d['capaciteMax'] > 0) { $seance->setCapaciteMax((int) $d['capaciteMax']); }
-        if (isset($d['prix'])) { $seance->setPrix((float) $d['prix']); }
-        if (isset($d['statut'])) { $seance->setStatut($d['statut']); }
+        if (isset($d['date'])) {
+            $seance->setDateSeance(new \DateTimeImmutable($d['date']));
+        }
+        if (isset($d['heureDebut'])) {
+            $seance->setHeureDebut(new \DateTimeImmutable($d['heureDebut']));
+        }
+        if (isset($d['heureFin'])) {
+            $seance->setHeureFin(new \DateTimeImmutable($d['heureFin']));
+        }
+        if (isset($d['capaciteMax']) && (int) $d['capaciteMax'] > 0) {
+            $seance->setCapaciteMax((int) $d['capaciteMax']);
+        }
+        if (isset($d['prix'])) {
+            $seance->setPrix((float) $d['prix']);
+        }
+        if (isset($d['statut'])) {
+            $seance->setStatut($d['statut']);
+        }
         $em->flush();
 
         return $this->json($this->toArray($seance));
@@ -136,7 +154,7 @@ class SeanceController extends AbstractController
         return $this->json(null, Response::HTTP_NO_CONTENT);
     }
 
-        #[Route('/{id}/places', name: 'api_seance_places', methods: ['GET'])]
+    #[Route('/{id}/places', name: 'api_seance_places', methods: ['GET'])]
 
     public function places(int $id, Connection $connection): JsonResponse
     {
