@@ -1,0 +1,14 @@
+<h1>Mon profil</h1>
+
+@if (erreur()) {
+  <p class="erreur">{{ erreur() }}</p>
+}
+
+@if (profil(); as p) {
+  <div class="carte">
+    <p><strong>Nom :</strong> {{ p.nom }}</p>
+    <p><strong>Prénom :</strong> {{ p.prenom }}</p>
+    <p><strong>Email :</strong> {{ p.email }}</p>
+    <p><strong>Téléphone :</strong> {{ p.telephone }}</p>
+  </div>
+}
