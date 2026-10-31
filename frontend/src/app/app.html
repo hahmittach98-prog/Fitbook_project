@@ -1,2 +1,15 @@
+<nav>
+  <a routerLink="/salles" class="logo">FitBook</a>
+  <a routerLink="/salles">Salles</a>
 
-<router-outlet />
+  @if (api.connecte()) {
+    <button type="button" (click)="deconnexion()">Déconnexion</button>
+  } @else {
+    <a routerLink="/connexion">Connexion</a>
+    <a routerLink="/inscription">Inscription</a>
+  }
+</nav>
+
+<main>
+  <router-outlet />
+</main>
