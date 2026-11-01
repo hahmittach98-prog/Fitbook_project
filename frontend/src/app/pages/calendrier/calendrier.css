@@ -1,0 +1,4 @@
+.grille { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
+.entete { font-weight: bold; text-align: center; }
+.jour { min-height: 60px; text-align: left; }
+.navigation { display: flex; align-items: center; gap: 16px; margin-bottom: 8px; }

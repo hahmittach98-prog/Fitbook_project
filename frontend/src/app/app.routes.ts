@@ -10,6 +10,7 @@ import { Reservations } from './pages/reservations/reservations';
 import { SalleDetail } from './pages/salle-detail/salle-detail';
 import { CoachDetail } from './pages/coach-detail/coach-detail';
 import { MesFavoris } from './pages/mes-favoris/mes-favoris';
+import { Calendrier } from './pages/calendrier/calendrier';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'salles', pathMatch: 'full' },
@@ -23,5 +24,6 @@ export const routes: Routes = [
   { path: 'reservations', component: Reservations },
   { path: 'salles/:id', component: SalleDetail },
   { path: 'coachs/:id', component: CoachDetail },
-  { path: 'favoris', component: MesFavoris }
+  { path: 'favoris', component: MesFavoris },
+  { path: 'calendrier', component: Calendrier }
 ];
