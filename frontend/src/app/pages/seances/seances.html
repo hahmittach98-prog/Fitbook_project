@@ -1,4 +1,10 @@
 <h1>Nos séances</h1>
+<form class="recherche" (ngSubmit)="chercher()">
+  <input type="date" name="date" [(ngModel)]="date">
+  <input type="number" name="prixMax" [(ngModel)]="prixMax" placeholder="Prix maximum (€)" min="0">
+  <button type="submit">Rechercher</button>
+  <button type="button" (click)="reinitialiser()">Réinitialiser</button>
+</form>
 
 @if (message()) {
   <p class="succes">{{ message() }}</p>

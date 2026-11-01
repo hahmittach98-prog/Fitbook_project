@@ -1,4 +1,10 @@
 <h1>Nos cours</h1>
+<form class="recherche" (ngSubmit)="chercher()">
+  <input type="search" name="q" [(ngModel)]="q" placeholder="Rechercher un cours">
+  <input type="text" name="niveau" [(ngModel)]="niveau" placeholder="Niveau (ex. debutant)">
+  <button type="submit">Rechercher</button>
+  <button type="button" (click)="reinitialiser()">Réinitialiser</button>
+</form>
 
 @if (erreur()) {
   <p class="erreur">{{ erreur() }}</p>

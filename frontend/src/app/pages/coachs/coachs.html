@@ -1,4 +1,11 @@
 <h1>Nos coachs</h1>
+<form class="recherche" (ngSubmit)="chercher()">
+  <input type="search" name="q" [(ngModel)]="q" placeholder="Rechercher un coach">
+  <input type="text" name="specialite" [(ngModel)]="specialite" placeholder="Spécialité">
+  <input type="number" name="tarifMax" [(ngModel)]="tarifMax" placeholder="Tarif maximum (€/h)" min="0">
+  <button type="submit">Rechercher</button>
+  <button type="button" (click)="reinitialiser()">Réinitialiser</button>
+</form>
 
 @if (erreur()) {
   <p class="erreur">{{ erreur() }}</p>

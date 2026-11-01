@@ -1,4 +1,11 @@
 <h1>Nos salles</h1>
+<form class="recherche" (ngSubmit)="chercher()">
+            <input type="search" name="q" [(ngModel)]="q" placeholder="Rechercher une salle">
+            <input type="text" name="ville" [(ngModel)]="ville" placeholder="Ville">
+            <input type="number" name="capaciteMin" [(ngModel)]="capaciteMin" placeholder="Capacité minimale" min="0">
+            <button type="submit">Rechercher</button>
+            <button type="button" (click)="reinitialiser()">Réinitialiser</button>
+       </form>
 
 @if (erreur()) {
   <p class="erreur">{{ erreur() }}</p>

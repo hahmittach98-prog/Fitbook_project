@@ -10,22 +10,33 @@ export class Api {
 
   connecte = signal(!!localStorage.getItem('token'));
 
-  getSalles(): Observable<any[]> {
-    return this.http.get<any[]>(`${API}/salles`);
-  }
-    getCoachs(): Observable<any[]> {
-    return this.http.get<any[]>(`${API}/coachs`);
+    private params(filtres: Record<string, any> = {}): HttpParams {
+    let p = new HttpParams();
+    for (const [cle, valeur] of Object.entries(filtres)) {
+      if (valeur !== '' && valeur !== null && valeur !== undefined) {
+        p = p.set(cle, String(valeur));
+      }
+    }
+    return p;
   }
 
-  getCours(): Observable<any[]> {
-    return this.http.get<any[]>(`${API}/cours`);
+  getSalles(filtres: Record<string, any> = {}): Observable<any[]> {
+    return this.http.get<any[]>(`${API}/salles`, { params: this.params(filtres) });
   }
-    getProfil(): Observable<any> {
+
+  getCoachs(filtres: Record<string, any> = {}): Observable<any[]> {
+    return this.http.get<any[]>(`${API}/coachs`, { params: this.params(filtres) });
+  }
+
+  getCours(filtres: Record<string, any> = {}): Observable<any[]> {
+    return this.http.get<any[]>(`${API}/cours`, { params: this.params(filtres) });
+  }
+
+  getSeances(filtres: Record<string, any> = {}): Observable<any[]> {
+    return this.http.get<any[]>(`${API}/seances`, { params: this.params(filtres) });
+  }
+  getProfil(): Observable<any> {
     return this.http.get<any>(`${API}/profil`);
-  }
-
-    getSeances(): Observable<any[]> {
-    return this.http.get<any[]>(`${API}/seances`);
   }
 
   reserver(seanceId: number): Observable<any> {

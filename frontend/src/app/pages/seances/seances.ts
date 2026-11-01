@@ -1,9 +1,10 @@
 import { Component, inject, signal } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { Api } from '../../services/api';
 
 @Component({
   selector: 'app-seances',
-  imports: [],
+  imports: [FormsModule],
   templateUrl: './seances.html',
   styleUrl: './seances.css'
 })
@@ -13,11 +14,24 @@ export class Seances {
   erreur = signal('');
   message = signal('');
 
+  date = '';
+  prixMax = '';
+
   constructor() {
-    this.api.getSeances().subscribe({
+    this.chercher();
+  }
+
+  chercher() {
+    this.api.getSeances({ date: this.date, prixMax: this.prixMax }).subscribe({
       next: (data) => this.seances.set(data),
       error: () => this.erreur.set('Impossible de charger les séances.')
     });
+  }
+
+  reinitialiser() {
+    this.date = '';
+    this.prixMax = '';
+    this.chercher();
   }
 
   reserver(id: number) {
