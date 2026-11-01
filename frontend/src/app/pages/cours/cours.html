@@ -8,6 +8,7 @@
   @for (c of cours(); track c.id) {
     <div class="carte">
       <h2>{{ c.nom }}</h2>
+      <app-etoile [type]="'cours'" [id]="c.id" />
       <p>Niveau : {{ c.niveau }}</p>
       <p>{{ c.description }}</p>
     </div>

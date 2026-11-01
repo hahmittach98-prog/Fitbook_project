@@ -8,8 +8,10 @@
   @for (s of salles(); track s.id) {
     <div class="carte">
       <h2>{{ s.nom }}</h2>
+      <app-etoile [type]="'salles'" [id]="s.id" />
       <p>{{ s.ville }} · {{ s.adresse }}</p>
       <p>Capacité : {{ s.capacite }}</p>
+      <a [routerLink]="['/salles', s.id]">Voir le détail</a>
     </div>
   } @empty {
     <p>Aucune salle pour le moment.</p>

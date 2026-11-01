@@ -1,0 +1,36 @@
+<h2>Avis</h2>
+
+@for (a of liste(); track a.id) {
+  <div class="avis">
+    <p><strong>{{ a.note }}/5</strong></p>
+    <p>{{ a.commentaire }}</p>
+  </div>
+} @empty {
+  <p>Aucun avis pour le moment.</p>
+}
+
+@if (api.connecte()) {
+  <form (ngSubmit)="envoyer()">
+    <label>Note
+      <select name="note" [(ngModel)]="note">
+        @for (n of notes; track n) {
+          <option [ngValue]="n">{{ n }}</option>
+        }
+      </select>
+    </label>
+    <label>Commentaire
+      <textarea name="commentaire" [(ngModel)]="commentaire"></textarea>
+    </label>
+
+    @if (erreur()) {
+      <p class="erreur">{{ erreur() }}</p>
+    }
+    @if (message()) {
+      <p class="succes">{{ message() }}</p>
+    }
+
+    <button type="submit">Envoyer mon avis</button>
+  </form>
+} @else {
+  <p>Connectez-vous pour laisser un avis.</p>
+}

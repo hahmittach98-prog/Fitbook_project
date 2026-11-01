@@ -8,6 +8,7 @@
     @if (api.connecte()) {
     <a routerLink="/reservations">Mes réservations</a>
     <a routerLink="/profil">Profil</a>
+    <a routerLink="/favoris">Mes favoris</a>
     <button type="button" (click)="deconnexion()">Déconnexion</button>
   } @else {
     <a routerLink="/connexion">Connexion</a>

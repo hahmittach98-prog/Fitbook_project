@@ -1,0 +1,31 @@
+<h1>Mes favoris</h1>
+
+<h2>Salles</h2>
+@for (s of favoris.liste().salles; track s.id) {
+  <p>
+    <a [routerLink]="['/salles', s.id]">{{ s.nom }}</a> · {{ s.ville }}
+    <app-etoile [type]="'salles'" [id]="s.id" />
+  </p>
+} @empty {
+  <p>Aucune salle en favori.</p>
+}
+
+<h2>Coachs</h2>
+@for (c of favoris.liste().coachs; track c.id) {
+  <p>
+    <a [routerLink]="['/coachs', c.id]">{{ c.specialite }}</a>
+    <app-etoile [type]="'coachs'" [id]="c.id" />
+  </p>
+} @empty {
+  <p>Aucun coach en favori.</p>
+}
+
+<h2>Cours</h2>
+@for (c of favoris.liste().cours; track c.id) {
+  <p>
+    {{ c.nom }}
+    <app-etoile [type]="'cours'" [id]="c.id" />
+  </p>
+} @empty {
+  <p>Aucun cours en favori.</p>
+}

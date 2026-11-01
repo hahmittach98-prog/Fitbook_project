@@ -8,9 +8,11 @@
   @for (c of coachs(); track c.id) {
     <div class="carte">
       <h2>{{ c.prenom }} {{ c.nom }}</h2>
+      <app-etoile [type]="'coachs'" [id]="c.id" />
       <p>{{ c.specialite }}</p>
       <p>{{ c.description }}</p>
       <p>Tarif : {{ c.tarifHoraire }} € / heure</p>
+      <a [routerLink]="['/coachs', c.id]">Voir le détail</a>
     </div>
   } @empty {
     <p>Aucun coach pour le moment.</p>

@@ -1,5 +1,5 @@
 import { Injectable, inject, signal } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 
 const API = 'https://127.0.0.1:8000/api';
@@ -38,6 +38,40 @@ export class Api {
 
   annulerReservation(id: number): Observable<any> {
     return this.http.delete<any>(`${API}/reservations/${id}`);
+  }
+    getSalle(id: number): Observable<any> {
+    return this.http.get<any>(`${API}/salles/${id}`);
+  }
+
+  getCoursSalle(id: number): Observable<any[]> {
+    return this.http.get<any[]>(`${API}/salles/${id}/cours`);
+  }
+
+  getCoach(id: number): Observable<any> {
+    return this.http.get<any>(`${API}/coachs/${id}`);
+  }
+
+  getAvis(salleId?: number, coachId?: number): Observable<any[]> {
+    let params = new HttpParams();
+    if (salleId) { params = params.set('salleId', salleId); }
+    if (coachId) { params = params.set('coachId', coachId); }
+    return this.http.get<any[]>(`${API}/avis`, { params });
+  }
+
+  creerAvis(donnees: any): Observable<any> {
+    return this.http.post<any>(`${API}/avis`, donnees);
+  }
+
+    getFavoris(): Observable<any> {
+    return this.http.get<any>(`${API}/favoris`);
+  }
+
+  ajouterFavori(type: string, id: number): Observable<any> {
+    return this.http.post<any>(`${API}/favoris/${type}/${id}`, {});
+  }
+
+  retirerFavori(type: string, id: number): Observable<any> {
+    return this.http.delete<any>(`${API}/favoris/${type}/${id}`);
   }
 
   login(email: string, password: string): Observable<{ token: string }> {

@@ -1,0 +1,6 @@
+@if (api.connecte()) {
+  <button type="button" class="etoile" [class.active]="actif()" (click)="clic()"
+          [attr.aria-label]="actif() ? 'Retirer des favoris' : 'Ajouter aux favoris'">
+    {{ actif() ? '★' : '☆' }}
+  </button>
+}

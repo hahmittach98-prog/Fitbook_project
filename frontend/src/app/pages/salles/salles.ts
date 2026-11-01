@@ -1,9 +1,11 @@
 import { Component, inject, signal } from '@angular/core';
 import { Api } from '../../services/api';
+import { RouterLink } from '@angular/router';
+import { Etoile } from '../../components/etoile/etoile';
 
 @Component({
   selector: 'app-salles',
-  imports: [],
+  imports: [RouterLink, Etoile],
   templateUrl: './salles.html',
   styleUrl: './salles.css'
 })
