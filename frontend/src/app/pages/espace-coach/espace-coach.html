@@ -13,8 +13,8 @@
     <p>Avant de créer des séances, indiquez votre spécialité.</p>
     <form (ngSubmit)="creerProfil()">
       <label>Spécialité <input type="text" name="specialite" [(ngModel)]="profil.specialite" required /></label>
-      <label>Description <textarea name="description" [(ngModel)]="profil.description"></textarea></label>
-      <label>Tarif horaire (€) <input type="number" name="tarifHoraire" [(ngModel)]="profil.tarifHoraire" min="0" /></label>
+      <label>Description <textarea name="description" [(ngModel)]="profil.description" required></textarea></label>
+      <label>Tarif horaire (€) <input type="number" name="tarifHoraire" [(ngModel)]="profil.tarifHoraire" min="0" required /></label>
       <button type="submit">Créer mon profil</button>
     </form>
   </div>
@@ -50,7 +50,23 @@
           <button type="submit">Créer la séance</button>
         </form>
       </div>
+
+      <div class="panneau espace-haut">
+        <app-disponibilites [coachId]="coach().id" />
+      </div>
     </div>
+
+    <div class="panneau espace-haut">
+        <h2>Mon profil professionnel</h2>
+        <form (ngSubmit)="enregistrerProfil()">
+          <label>Spécialité <input type="text" name="mpSpecialite" [(ngModel)]="monProfil.specialite" required /></label>
+          <label>Description <textarea name="mpDescription" [(ngModel)]="monProfil.description" required></textarea></label>
+          <label>Tarif horaire (€) <input type="number" name="mpTarif" [(ngModel)]="monProfil.tarifHoraire" min="0" required /></label>
+          <button type="submit">Enregistrer</button>
+        </form>
+    </div>
+
+
 
     <div class="panneau">
       <h2>Mes séances</h2>

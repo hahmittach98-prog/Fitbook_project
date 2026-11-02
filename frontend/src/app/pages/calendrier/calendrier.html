@@ -39,6 +39,7 @@
   @for (s of seancesDuJour(); track s.id) {
     <div class="carte">
       <h3>{{ s.coursNom }}</h3>
+      <p>Coach : {{ s.coachNom }}</p>
       <p>{{ s.salleNom }} · {{ s.heureDebut }} - {{ s.heureFin }}</p>
       <p>{{ s.prix }} € · {{ s.capaciteMax }} places maximum</p>
       @if (api.connecte()) {

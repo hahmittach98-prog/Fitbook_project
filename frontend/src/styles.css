@@ -1,9 +1,4 @@
-/* =====================================================
-   FitBook : style général du site (thème sombre)
-   Ce fichier contient tout ce qui est commun aux pages.
-   Ordre : couleurs, base, menu, cartes, photos, pages,
-   espaces, calendrier, messages, responsive.
-   ===================================================== */
+
 
 
 /* ---------- 1. Couleurs et polices ----------
@@ -51,16 +46,52 @@ a { color: var(--laiton); text-underline-offset: 3px; }
 :focus-visible { outline: 2px solid var(--laiton); outline-offset: 2px; }
 
 /* le contenu des pages est centré et pas trop large */
-main { max-width: 1180px; margin: 0 auto; padding: 18px 16px; }
+app-root { display: flex; flex-direction: column; min-height: 100vh; }
+main { flex: 1; width: 100%; max-width: 1180px; margin: 0 auto; padding: 18px 16px; }
+
 
 footer {
-  padding: 14px 20px;
-  text-align: center;
+  margin-top: 40px;
+  border-top: 1px solid var(--trait);
   color: var(--texte-doux);
   font-size: 0.9rem;
-  border-top: 1px solid var(--trait);
-  margin-top: 24px;
 }
+.footer-ligne {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 20px 20px 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px 24px;
+}
+footer .logo {
+  font-family: var(--police-titre);
+  font-weight: 800;
+  font-size: 1.5rem;
+  color: var(--laiton);
+  text-decoration: none;
+}
+.footer-liens { display: flex; flex-wrap: wrap; gap: 6px 20px; }
+.footer-liens a { color: var(--texte-doux); text-decoration: none; }
+.footer-liens a:hover { color: var(--laiton-clair); }
+
+/* les icônes des réseaux sociaux : juste le dessin, doré au survol */
+.reseaux { display: flex; gap: 14px; }
+.reseaux a { color: var(--texte-doux); display: flex; }
+.reseaux a:hover { color: var(--laiton-clair); }
+.reseaux svg {
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.footer-bas { text-align: center; padding: 0 20px 18px; font-size: 0.8rem; opacity: 0.7; }
 
 
 /* ---------- 3. Menu du haut ---------- */
@@ -381,10 +412,18 @@ app-etoile button:hover { background: none; color: var(--laiton-clair); }
 .fiche-texte h2 { margin-top: 18px; font-size: 1.2rem; }
 .fiche .description { max-width: 62ch; line-height: 1.65; color: var(--texte); margin: 10px 0; }
 .fiche .prix { font-family: var(--police-titre); font-size: 1.4rem; color: var(--laiton); }
-.fiche-photo { flex: 0 0 280px; }
-.fiche-photo .photo { height: 230px; margin: 0; }
-.rond.grand { flex: 0 0 160px; padding: 0; }
+.fiche-photo { flex: 0 0 280px; align-self: center; }
+.fiche-photo .photo { height: auto; max-height: 320px; object-fit: contain; background: transparent; }
+.fiche-photo .photo.vide { height: 230px; background: var(--trait); }   /* le cadre gris quand il n'y a pas de photo */
+.rond.grand { flex: 0 0 160px; padding: 0; align-self: center; }
 .rond.grand .photo { width: 150px; height: 150px; border-radius: 50%; margin: 0; }
+
+/* la page détail est centrée avec des marges à gauche et à droite */
+app-coach-detail, app-salle-detail { display: block; max-width: 980px; margin: 0 auto; }
+app-coach-detail .panneau, app-salle-detail .panneau { margin-bottom: 18px; }
+
+/* la photo de la salle est affichée en entier (le logo n'est plus coupé) */
+.fiche-photo .photo { object-fit: contain; background: #fff; }
 
 
 /* ---------- 9. Profil ---------- */
@@ -476,6 +515,12 @@ app-profil h1 { text-align: center; }
   margin: 2px 4px 2px 0;
 }
 
+/* les cases à cocher */
+.choix-cours { border: 1px solid var(--trait); border-radius: 6px; margin: 0 0 12px; padding: 8px 12px; }
+.choix-cours legend { color: var(--texte-doux); padding: 0 6px; }
+.choix-cours .case { display: flex; flex-direction: row; align-items: center; gap: 8px; margin: 4px 0; }
+.choix-cours .case input { width: auto; margin: 0; }
+
 
 /* ---------- 11. Tableaux ---------- */
 
@@ -518,7 +563,7 @@ app-connexion form, app-inscription form { margin: 0 auto; text-align: left; }
 
 
 /* ---------- 15. Responsive (tablette et mobile) ---------- */
-/* Ces règles sont à la fin pour être sûre qu'elles passent après les autres. */
+
 
 @media (max-width: 800px) {
   /* menu hamburger : les liens passent sous le logo, l'un en dessous de l'autre */
@@ -557,6 +602,9 @@ app-connexion form, app-inscription form { margin: 0 auto; text-align: left; }
   .fiche { flex-direction: column; align-items: center; }
   .fiche-photo { flex: none; width: 100%; }
   .fiche-texte { width: 100%; }
+
+  /* pied de page : tout est centré, l'un sous l'autre */
+  .footer-ligne { flex-direction: column; text-align: center; }
 }
 
 @media (max-width: 600px) {

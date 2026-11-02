@@ -18,11 +18,14 @@
     <div class="carte">
       <h2>{{ s.coursNom }}</h2>
       <p>{{ s.salleNom }}</p>
+      <p>Coach : {{ s.coachNom }}</p>
       <p>{{ s.date }} · {{ s.heureDebut }} - {{ s.heureFin }}</p>
       <p>{{ s.prix }} € · {{ s.capaciteMax }} places maximum</p>
 
       @if (api.connecte()) {
-        <button type="button" (click)="reserver(s.id)">Réserver</button>
+        @if (!api.aRole('ROLE_COACH', 'ROLE_SALLE', 'ROLE_ADMIN')) {
+            <button type="button" (click)="reserver(s.id)">Réserver</button>
+}
       } @else {
         <p>Connectez-vous pour réserver.</p>
       }
