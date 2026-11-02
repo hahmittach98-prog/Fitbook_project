@@ -9,6 +9,16 @@
     @if (api.connecte()) {
     <a routerLink="/reservations">Mes réservations</a>
     <a routerLink="/profil">Profil</a>
+        @if (api.aRole('ROLE_ADMIN')) {
+      <a routerLink="/admin">Espace admin</a>
+
+    }
+        @if (api.aRole('ROLE_COACH')) {
+      <a routerLink="/espace-coach">Espace coach</a>
+    }
+        @if (api.aRole('ROLE_SALLE')) {
+      <a routerLink="/espace-salle">Espace salle</a>
+    }
     <a routerLink="/favoris">Mes favoris</a>
     <button type="button" (click)="deconnexion()">Déconnexion</button>
   } @else {

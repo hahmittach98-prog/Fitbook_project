@@ -1,4 +1,4 @@
-import { Injectable, inject, signal } from '@angular/core';
+import { Injectable, inject, signal, computed } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 
@@ -6,9 +6,24 @@ const API = 'https://127.0.0.1:8000/api';
 
 @Injectable({ providedIn: 'root' })
 export class Api {
+
   private http = inject(HttpClient);
 
   connecte = signal(!!localStorage.getItem('token'));
+    roles = computed<string[]>(() => {
+    if (!this.connecte()) return [];
+    try {
+      const charge = localStorage.getItem('token')!.split('.')[1].replace(/-/g, '+').replace(/_/g, '/');
+      return JSON.parse(atob(charge)).roles ?? [];
+    } catch {
+      return [];
+    }
+  });
+
+  aRole(...roles: string[]): boolean {
+    return this.roles().some((r) => roles.includes(r));
+  }
+
 
     private params(filtres: Record<string, any> = {}): HttpParams {
     let p = new HttpParams();
@@ -83,6 +98,46 @@ export class Api {
 
   retirerFavori(type: string, id: number): Observable<any> {
     return this.http.delete<any>(`${API}/favoris/${type}/${id}`);
+  }
+    adminUsers(): Observable<any[]> {
+    return this.http.get<any[]>(`${API}/admin/users`);
+  }
+
+  adminVerifier(id: number): Observable<any> {
+    return this.http.put(`${API}/admin/users/${id}/verify`, {});
+  }
+
+  adminSupprimer(id: number): Observable<any> {
+    return this.http.delete(`${API}/admin/users/${id}`);
+  }
+    creerSeance(data: any): Observable<any> {
+    return this.http.post(`${API}/seances`, data);
+  }
+
+  supprimerSeance(id: number): Observable<any> {
+    return this.http.delete(`${API}/seances/${id}`);
+  }
+
+  getReservationsSeance(id: number): Observable<any[]> {
+    return this.http.get<any[]>(`${API}/reservations/seance/${id}`);
+  }
+
+    creerCoach(data: any): Observable<any> {
+    return this.http.post(`${API}/coachs`, data);
+  }
+    adminAvis(): Observable<any[]> {
+    return this.http.get<any[]>(`${API}/admin/avis`);
+  }
+
+  adminModerer(id: number, statut: string): Observable<any> {
+    return this.http.put(`${API}/admin/avis/${id}/moderation`, { statut });
+  }
+    creerSalle(data: any): Observable<any> {
+    return this.http.post(`${API}/salles`, data);
+  }
+
+  modifierSalle(id: number, data: any): Observable<any> {
+    return this.http.put(`${API}/salles/${id}`, data);
   }
 
   login(email: string, password: string): Observable<{ token: string }> {

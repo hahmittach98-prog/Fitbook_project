@@ -11,6 +11,11 @@ import { SalleDetail } from './pages/salle-detail/salle-detail';
 import { CoachDetail } from './pages/coach-detail/coach-detail';
 import { MesFavoris } from './pages/mes-favoris/mes-favoris';
 import { Calendrier } from './pages/calendrier/calendrier';
+import { Admin } from './pages/admin/admin';
+import { roleGuard } from './securite/role';
+import { EspaceCoach } from './pages/espace-coach/espace-coach';
+import { EspaceSalle } from './pages/espace-salle/espace-salle';
+
 
 export const routes: Routes = [
   { path: '', redirectTo: 'salles', pathMatch: 'full' },
@@ -25,5 +30,9 @@ export const routes: Routes = [
   { path: 'salles/:id', component: SalleDetail },
   { path: 'coachs/:id', component: CoachDetail },
   { path: 'favoris', component: MesFavoris },
-  { path: 'calendrier', component: Calendrier }
+  { path: 'calendrier', component: Calendrier },
+  { path: 'admin', component: Admin, canActivate: [roleGuard('ROLE_ADMIN')] },
+  { path: 'espace-coach', component: EspaceCoach, canActivate: [roleGuard('ROLE_COACH')] },
+  { path: 'espace-salle', component: EspaceSalle, canActivate: [roleGuard('ROLE_SALLE')] }
+
 ];
