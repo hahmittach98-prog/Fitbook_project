@@ -1,12 +1,11 @@
 import { Component, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Api } from '../../services/api';
-import { Photo } from '../../components/photo/photo';
-import { Telechargement } from '../../components/telechargement/telechargement';
+
 
 @Component({
   selector: 'app-espace-coach',
-  imports: [FormsModule, Photo, Telechargement],
+  imports: [FormsModule],
   templateUrl: './espace-coach.html',
   styleUrl: './espace-coach.css'
 })
