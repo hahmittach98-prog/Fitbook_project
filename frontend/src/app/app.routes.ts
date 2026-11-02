@@ -15,10 +15,11 @@ import { Admin } from './pages/admin/admin';
 import { roleGuard } from './securite/role';
 import { EspaceCoach } from './pages/espace-coach/espace-coach';
 import { EspaceSalle } from './pages/espace-salle/espace-salle';
+import { Accueil } from './pages/accueil/accueil';
 
 
 export const routes: Routes = [
-  { path: '', redirectTo: 'salles', pathMatch: 'full' },
+  { path: '', component: Accueil },
   { path: 'salles', component: Salles },
   { path: 'connexion', component: Connexion },
   { path: 'inscription', component: Inscription },
@@ -34,5 +35,6 @@ export const routes: Routes = [
   { path: 'admin', component: Admin, canActivate: [roleGuard('ROLE_ADMIN')] },
   { path: 'espace-coach', component: EspaceCoach, canActivate: [roleGuard('ROLE_COACH')] },
   { path: 'espace-salle', component: EspaceSalle, canActivate: [roleGuard('ROLE_SALLE')] }
+  
 
 ];
