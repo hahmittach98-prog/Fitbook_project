@@ -4,10 +4,11 @@ import { Api } from '../../services/api';
 import { Avis } from '../../components/avis/avis';
 import { Photo } from '../../components/photo/photo';
 import { Etoile } from '../../components/etoile/etoile';
+import { Disponibilites } from '../../components/disponibilites/disponibilites';
 
 @Component({
   selector: 'app-salle-detail',
-  imports: [RouterLink, Avis, Photo, Etoile],
+  imports: [RouterLink, Avis, Photo, Etoile, Disponibilites],
   templateUrl: './salle-detail.html',
   styleUrl: './salle-detail.css'
 })

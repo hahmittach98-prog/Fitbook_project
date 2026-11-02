@@ -14,7 +14,7 @@
 <div class="liste">
   @for (c of coachs(); track c.id) {
     <div class="carte horizontale">
-      <div class="rond"><app-photo dossier="coachs" [nom]="c.imageName" /></div>
+      <div class="rond"><app-photo dossier="users" [nom]="c.imageName" /></div>
       <div class="texte">
         <h2>{{ c.prenom }} {{ c.nom }}</h2>
         <app-etoile [type]="'coachs'" [id]="c.id" />

@@ -1,11 +1,12 @@
 import { Component, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Api } from '../../services/api';
+import { Disponibilites } from '../../components/disponibilites/disponibilites';
 
 
 @Component({
   selector: 'app-espace-coach',
-  imports: [FormsModule],
+  imports: [FormsModule, Disponibilites],
   templateUrl: './espace-coach.html',
   styleUrl: './espace-coach.css'
 })
@@ -22,6 +23,7 @@ export class EspaceCoach {
   message = signal('');
   profilManquant = signal(false);
   profil = { specialite: '', description: '', tarifHoraire: '' };
+  monProfil = { specialite: '', description: '', tarifHoraire: '' };
 
   form = { coursId: '', salleId: '', date: '', heureDebut: '', heureFin: '', capaciteMax: 10, prix: 10 };
 
@@ -33,11 +35,36 @@ export class EspaceCoach {
         const moi = liste.find((c) => c.userId === p.id);
         if (moi) {
           this.coach.set(moi);
+          this.remplirProfil(moi);
           this.chargerSeances();
                 } else {
           this.profilManquant.set(true);
         }
       });
+    });
+  }
+    remplirProfil(c: any) {
+    this.monProfil = {
+      specialite: c.specialite ?? '',
+      description: c.description ?? '',
+      tarifHoraire: c.tarifHoraire != null ? String(c.tarifHoraire) : ''
+    };
+  }
+
+  enregistrerProfil() {
+    this.erreur.set('');
+    this.message.set('');
+    const p = this.monProfil;
+    this.api.modifierCoach(this.coach().id, {
+      specialite: p.specialite,
+      description: p.description || null,
+      tarifHoraire: p.tarifHoraire ? Number(p.tarifHoraire) : null
+    }).subscribe({
+      next: (c) => {
+        this.coach.set({ ...this.coach(), ...c });
+        this.message.set('Profil mis à jour.');
+      },
+      error: (e) => this.erreur.set(e.error?.erreur ?? 'Modification impossible.')
     });
   }
 
@@ -54,6 +81,7 @@ export class EspaceCoach {
     }).subscribe({
       next: (c) => {
         this.coach.set(c);
+        this.remplirProfil(c);
         this.profilManquant.set(false);
         this.message.set('Profil coach créé.');
         this.chargerSeances();

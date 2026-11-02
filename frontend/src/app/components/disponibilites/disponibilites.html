@@ -1,0 +1,49 @@
+<h2>Disponibilités</h2>
+
+@if (liste().length === 0) {
+  <p>Aucune disponibilité pour le moment.</p>
+} @else {
+  <table>
+    <thead>
+      <tr>
+        <th>Jour</th><th>Début</th><th>Fin</th>
+        @if (!lecture()) { <th></th> }
+      </tr>
+    </thead>
+    <tbody>
+      @for (d of liste(); track d.id) {
+        <tr>
+          <td>{{ d.jourSemaine }}</td>
+          <td>{{ d.heureDebut }}</td>
+          <td>{{ d.heureFin }}</td>
+          @if (!lecture()) {
+            <td><button type="button" (click)="supprimer(d.id)">Supprimer</button></td>
+          }
+        </tr>
+      }
+    </tbody>
+  </table>
+}
+
+@if (!lecture()) {
+  <form class="form-grille" (ngSubmit)="ajouter()">
+    <label>Jour
+      <select name="jour" [(ngModel)]="jour">
+        @for (j of jours; track j) {
+          <option [value]="j">{{ j }}</option>
+        }
+      </select>
+    </label>
+    <label>Début
+      <input type="time" name="heureDebut" [(ngModel)]="heureDebut" />
+    </label>
+    <label>Fin
+      <input type="time" name="heureFin" [(ngModel)]="heureFin" />
+    </label>
+    <button type="submit">Ajouter</button>
+  </form>
+
+  @if (erreur()) {
+    <p class="erreur">{{ erreur() }}</p>
+  }
+}

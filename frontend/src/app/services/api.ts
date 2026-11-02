@@ -125,6 +125,10 @@ export class Api {
     creerCoach(data: any): Observable<any> {
     return this.http.post(`${API}/coachs`, data);
   }
+    modifierCoach(id: number, data: any): Observable<any> {
+    return this.http.put(`${API}/coachs/${id}`, data);
+  }
+  
     adminAvis(): Observable<any[]> {
     return this.http.get<any[]>(`${API}/admin/avis`);
   }
@@ -161,6 +165,29 @@ export class Api {
 
   supprimerCours(id: number): Observable<any> {
     return this.http.delete(`${API}/cours/${id}`);
+  }
+
+    listerDispos(params: Record<string, number>): Observable<any[]> {
+    return this.http.get<any[]>(`${API}/disponibilites`, { params });
+  }
+
+  creerDispo(data: any): Observable<any> {
+    return this.http.post(`${API}/disponibilites`, data);
+  }
+
+  supprimerDispo(id: number): Observable<any> {
+    return this.http.delete(`${API}/disponibilites/${id}`);
+  }
+    listerCoursSalle(id: number): Observable<any[]> {
+    return this.http.get<any[]>(`${API}/salles/${id}/cours`);
+  }
+
+  ajouterCoursSalle(salleId: number, coursId: number): Observable<any> {
+    return this.http.post(`${API}/salles/${salleId}/cours/${coursId}`, {});
+  }
+
+  retirerCoursSalle(salleId: number, coursId: number): Observable<any> {
+    return this.http.delete(`${API}/salles/${salleId}/cours/${coursId}`);
   }
 
   login(email: string, password: string): Observable<{ token: string }> {

@@ -3,9 +3,10 @@ import { FormsModule } from '@angular/forms';
 import { Api } from '../../services/api';
 import { Photo } from '../../components/photo/photo';
 import { Telechargement } from '../../components/telechargement/telechargement';
+import { Disponibilites } from '../../components/disponibilites/disponibilites';
 @Component({
   selector: 'app-espace-salle',
-  imports: [FormsModule, Photo, Telechargement],
+  imports: [FormsModule, Photo, Telechargement, Disponibilites],
   templateUrl: './espace-salle.html',
   styleUrl: './espace-salle.css'
 })
@@ -19,11 +20,18 @@ export class EspaceSalle {
   edition = signal(0);
   erreur = signal('');
   message = signal('');
-    cours = signal<any[]>([]);
+  cours = signal<any[]>([]);
   coachs = signal<any[]>([]);
   formSeance = { salleId: '', coachId: '', coursId: '', date: '', heureDebut: '', heureFin: '', capaciteMax: 10, prix: 10 };
 
   form = { nom: '', ville: '', adresse: '', capacite: '', telephone: '', description: '' };
+    salleDispo = ''; 
+
+  get salleDispoId(): number | null {
+    return this.salleDispo ? Number(this.salleDispo) : null;
+  }
+  coursChoisis = signal<number[]>([]);   
+  coursAvant: number[] = [];            
 
   constructor() {
     this.charger();
@@ -61,7 +69,9 @@ export class EspaceSalle {
       : this.api.creerSalle(data);
 
     requete.subscribe({
-      next: () => {
+       next: (salle: any) => {
+        const salleId = this.edition() || salle.id;
+        this.enregistrerCours(salleId);
         this.message.set(this.edition() ? 'Salle modifiée.' : 'Salle créée.');
         this.annuler();
         this.charger();
@@ -80,11 +90,31 @@ export class EspaceSalle {
       telephone: s.telephone ?? '',
       description: s.description ?? ''
     };
+      this.api.listerCoursSalle(s.id).subscribe((liste) => {
+      this.coursAvant = liste.map((c) => c.id);
+      this.coursChoisis.set(this.coursAvant);
+    });
   }
 
   annuler() {
     this.edition.set(0);
     this.form = { nom: '', ville: '', adresse: '', capacite: '', telephone: '', description: '' };
+    this.coursChoisis.set([]);
+    this.coursAvant = [];
+  }
+    basculer(id: number) {
+    const liste = this.coursChoisis();
+    this.coursChoisis.set(liste.includes(id) ? liste.filter((x) => x !== id) : [...liste, id]);
+  }
+
+  enregistrerCours(salleId: number) {
+    const choisis = this.coursChoisis();
+    for (const id of choisis) {
+      if (!this.coursAvant.includes(id)) this.api.ajouterCoursSalle(salleId, id).subscribe();
+    }
+    for (const id of this.coursAvant) {
+      if (!choisis.includes(id)) this.api.retirerCoursSalle(salleId, id).subscribe();
+    }
   }
 
   afficherReservations(id: number) {

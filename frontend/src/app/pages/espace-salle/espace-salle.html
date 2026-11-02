@@ -17,6 +17,15 @@
       <label>Capacité <input type="number" name="capacite" [(ngModel)]="form.capacite" min="1" required /></label>
       <label>Téléphone <input type="text" name="telephone" [(ngModel)]="form.telephone" /></label>
       <label>Description <textarea name="description" [(ngModel)]="form.description"></textarea></label>
+            <fieldset class="choix-cours">
+        <legend>Cours proposés</legend>
+        @for (c of cours(); track c.id) {
+          <label class="case">
+            <input type="checkbox" [checked]="coursChoisis().includes(c.id)" (change)="basculer(c.id)" />
+            {{ c.nom }}
+          </label>
+        }
+      </fieldset>
       <button type="submit">{{ edition() ? 'Enregistrer' : 'Créer la salle' }}</button>
       @if (edition()) {
         <button type="button" (click)="annuler()">Annuler</button>
@@ -126,4 +135,18 @@
       </tbody>
     </table>
   </div>
+</div>
+<div class="panneau espace-haut">
+  <label>Disponibilités de la salle
+    <select name="salleDispo" [(ngModel)]="salleDispo">
+      <option value="">Choisir une salle</option>
+      @for (s of salles(); track s.id) {
+        <option [value]="s.id">{{ s.nom }}</option>
+      }
+    </select>
+  </label>
+
+  @if (salleDispoId) {
+    <app-disponibilites [salleId]="salleDispoId" />
+  }
 </div>

@@ -25,7 +25,7 @@ class CoachController extends AbstractController
             'description' => $c->getDescription(),
             'tarifHoraire' => $c->getTarifHoraire(),
             'photo' => $c->getPhoto(),
-            'imageName' => $c->getImageName(),
+            'imageName' => $c->getUser()?->getImageName(),
             'modifieLe' => $c->getUpdatedAt()?->format('Y-m-d H:i'),
         ];
     }
