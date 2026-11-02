@@ -4,9 +4,10 @@ import { Api } from '../../services/api';
 import { Photo } from '../../components/photo/photo';
 import { Telechargement } from '../../components/telechargement/telechargement';
 import { Disponibilites } from '../../components/disponibilites/disponibilites';
+import { Avis } from '../../components/avis/avis';
 @Component({
   selector: 'app-espace-salle',
-  imports: [FormsModule, Photo, Telechargement, Disponibilites],
+  imports: [FormsModule, Photo, Telechargement, Disponibilites, Avis],
   templateUrl: './espace-salle.html',
   styleUrl: './espace-salle.css'
 })
