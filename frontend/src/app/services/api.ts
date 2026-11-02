@@ -140,6 +140,21 @@ export class Api {
     return this.http.put(`${API}/salles/${id}`, data);
   }
 
+    envoyerImage(type: 'profil' | 'coachs' | 'salles', id: number, fichier: File): Observable<any> {
+    const donnees = new FormData();
+    donnees.append('image', fichier);
+    const url = type === 'profil' ? `${API}/profil/image` : `${API}/${type}/${id}/image`;
+    return this.http.post<any>(url, donnees);
+  }
+
+  urlImage(dossier: string, nom?: string | null): string {
+    return nom ? `${API.replace('/api', '')}/images/${dossier}/${nom}` : '';
+  }
+
+    modifierProfil(data: any): Observable<any> {
+    return this.http.put(`${API}/profil`, data);
+  }
+
   login(email: string, password: string): Observable<{ token: string }> {
     return this.http.post<{ token: string }>(`${API}/login`, { email, password }).pipe(
       tap((reponse) => {

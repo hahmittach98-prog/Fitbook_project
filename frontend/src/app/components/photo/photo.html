@@ -1,0 +1,5 @@
+@if (nom()) {
+  <img class="photo" [src]="api.urlImage(dossier(), nom())" alt="Photo" />
+} @else {
+  <div class="photo vide"></div>
+}

@@ -1,10 +1,12 @@
 import { Component, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Api } from '../../services/api';
+import { Photo } from '../../components/photo/photo';
+import { Telechargement } from '../../components/telechargement/telechargement';
 
 @Component({
   selector: 'app-espace-coach',
-  imports: [FormsModule],
+  imports: [FormsModule, Photo, Telechargement],
   templateUrl: './espace-coach.html',
   styleUrl: './espace-coach.css'
 })
@@ -103,5 +105,9 @@ export class EspaceCoach {
       this.reservations.set(d);
       this.voir.set(id);
     });
+  }
+
+    photoEnvoyee(nom: string) {
+    this.coach.set({ ...this.coach(), imageName: nom });
   }
 }
