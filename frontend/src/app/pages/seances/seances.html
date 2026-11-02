@@ -1,0 +1,33 @@
+<h1>Nos séances</h1>
+<form class="recherche" (ngSubmit)="chercher()">
+  <input type="date" name="date" [(ngModel)]="date">
+  <input type="number" name="prixMax" [(ngModel)]="prixMax" placeholder="Prix maximum (€)" min="0">
+  <button type="submit">Rechercher</button>
+  <button type="button" (click)="reinitialiser()">Réinitialiser</button>
+</form>
+
+@if (message()) {
+  <p class="succes">{{ message() }}</p>
+}
+@if (erreur()) {
+  <p class="erreur">{{ erreur() }}</p>
+}
+
+<div class="liste">
+  @for (s of seances(); track s.id) {
+    <div class="carte">
+      <h2>{{ s.coursNom }}</h2>
+      <p>{{ s.salleNom }}</p>
+      <p>{{ s.date }} · {{ s.heureDebut }} - {{ s.heureFin }}</p>
+      <p>{{ s.prix }} € · {{ s.capaciteMax }} places maximum</p>
+
+      @if (api.connecte()) {
+        <button type="button" (click)="reserver(s.id)">Réserver</button>
+      } @else {
+        <p>Connectez-vous pour réserver.</p>
+      }
+    </div>
+  } @empty {
+    <p>Aucune séance pour le moment.</p>
+  }
+</div>

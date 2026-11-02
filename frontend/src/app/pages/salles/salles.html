@@ -1,4 +1,11 @@
 <h1>Nos salles</h1>
+<form class="recherche" (ngSubmit)="chercher()">
+            <input type="search" name="q" [(ngModel)]="q" placeholder="Rechercher une salle">
+            <input type="text" name="ville" [(ngModel)]="ville" placeholder="Ville">
+            <input type="number" name="capaciteMin" [(ngModel)]="capaciteMin" placeholder="Capacité minimale" min="0">
+            <button type="submit">Rechercher</button>
+            <button type="button" (click)="reinitialiser()">Réinitialiser</button>
+       </form>
 
 @if (erreur()) {
   <p class="erreur">{{ erreur() }}</p>
@@ -8,8 +15,10 @@
   @for (s of salles(); track s.id) {
     <div class="carte">
       <h2>{{ s.nom }}</h2>
+      <app-etoile [type]="'salles'" [id]="s.id" />
       <p>{{ s.ville }} · {{ s.adresse }}</p>
       <p>Capacité : {{ s.capacite }}</p>
+      <a [routerLink]="['/salles', s.id]">Voir le détail</a>
     </div>
   } @empty {
     <p>Aucune salle pour le moment.</p>

@@ -1,4 +1,11 @@
 <h1>Nos coachs</h1>
+<form class="recherche" (ngSubmit)="chercher()">
+  <input type="search" name="q" [(ngModel)]="q" placeholder="Rechercher un coach">
+  <input type="text" name="specialite" [(ngModel)]="specialite" placeholder="Spécialité">
+  <input type="number" name="tarifMax" [(ngModel)]="tarifMax" placeholder="Tarif maximum (€/h)" min="0">
+  <button type="submit">Rechercher</button>
+  <button type="button" (click)="reinitialiser()">Réinitialiser</button>
+</form>
 
 @if (erreur()) {
   <p class="erreur">{{ erreur() }}</p>
@@ -8,9 +15,11 @@
   @for (c of coachs(); track c.id) {
     <div class="carte">
       <h2>{{ c.prenom }} {{ c.nom }}</h2>
+      <app-etoile [type]="'coachs'" [id]="c.id" />
       <p>{{ c.specialite }}</p>
       <p>{{ c.description }}</p>
       <p>Tarif : {{ c.tarifHoraire }} € / heure</p>
+      <a [routerLink]="['/coachs', c.id]">Voir le détail</a>
     </div>
   } @empty {
     <p>Aucun coach pour le moment.</p>

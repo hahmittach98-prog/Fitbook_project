@@ -21,6 +21,7 @@ class ReservationController extends AbstractController
     {
         return [
             'id' => $r->getId(),
+            'sportif' => trim(($r->getUser()?->getPrenom() ?? '') . ' ' . ($r->getUser()?->getNom() ?? '')),
             'date' => $r->getDateReservation()?->format('Y-m-d H:i'),
             'statut' => $r->getStatut(),
             'dateAnnulation' => $r->getDateAnnulation()?->format('Y-m-d H:i'),

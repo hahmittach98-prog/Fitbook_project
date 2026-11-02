@@ -1,0 +1,85 @@
+<h1>Espace salle</h1>
+
+@if (message()) {
+  <p class="succes">{{ message() }}</p>
+}
+@if (erreur()) {
+  <p class="erreur">{{ erreur() }}</p>
+}
+
+<h2>{{ edition() ? 'Modifier ma salle' : 'Ajouter une salle' }}</h2>
+<form (ngSubmit)="envoyer()">
+  <label>Nom <input type="text" name="nom" [(ngModel)]="form.nom" required /></label>
+  <label>Ville <input type="text" name="ville" [(ngModel)]="form.ville" required /></label>
+  <label>Adresse <input type="text" name="adresse" [(ngModel)]="form.adresse" required /></label>
+  <label>Capacité <input type="number" name="capacite" [(ngModel)]="form.capacite" min="1" required /></label>
+  <label>Téléphone <input type="text" name="telephone" [(ngModel)]="form.telephone" /></label>
+  <label>Description <textarea name="description" [(ngModel)]="form.description"></textarea></label>
+  <button type="submit">{{ edition() ? 'Enregistrer' : 'Créer la salle' }}</button>
+  @if (edition()) {
+    <button type="button" (click)="annuler()">Annuler</button>
+  }
+</form>
+
+<h2>Mes salles</h2>
+@for (s of salles(); track s.id) {
+  <div class="carte">
+    <h3>{{ s.nom }}</h3>
+    <p>{{ s.adresse }}, {{ s.ville }} · {{ s.capacite }} places</p>
+    <button type="button" (click)="modifier(s)">Modifier</button>
+  </div>
+} @empty {
+  <p>Vous n'avez pas encore de salle.</p>
+}
+<h2>Créer une séance</h2>
+<form (ngSubmit)="creerSeance()">
+  <label>Salle
+    <select name="salleId" [(ngModel)]="formSeance.salleId" required>
+      <option value="">Choisir</option>
+      @for (s of salles(); track s.id) {
+        <option [value]="s.id">{{ s.nom }}</option>
+      }
+    </select>
+  </label>
+  <label>Coach
+    <select name="coachId" [(ngModel)]="formSeance.coachId" required>
+      <option value="">Choisir</option>
+      @for (c of coachs(); track c.id) {
+        <option [value]="c.id">{{ c.prenom }} {{ c.nom }} ({{ c.specialite }})</option>
+      }
+    </select>
+  </label>
+  <label>Cours
+    <select name="coursId" [(ngModel)]="formSeance.coursId" required>
+      <option value="">Choisir</option>
+      @for (c of cours(); track c.id) {
+        <option [value]="c.id">{{ c.nom }}</option>
+      }
+    </select>
+  </label>
+  <label>Date <input type="date" name="sDate" [(ngModel)]="formSeance.date" required /></label>
+  <label>Début <input type="time" name="sDebut" [(ngModel)]="formSeance.heureDebut" required /></label>
+  <label>Fin <input type="time" name="sFin" [(ngModel)]="formSeance.heureFin" required /></label>
+  <label>Places <input type="number" name="sPlaces" [(ngModel)]="formSeance.capaciteMax" min="1" required /></label>
+  <label>Prix (€) <input type="number" name="sPrix" [(ngModel)]="formSeance.prix" min="0" required /></label>
+  <button type="submit">Créer la séance</button>
+</form>
+
+<h2>Séances dans mes salles</h2>
+@for (s of seances(); track s.id) {
+  <div class="carte">
+    <h3>{{ s.coursNom }} · {{ s.salleNom }}</h3>
+    <p>{{ s.date }} · {{ s.heureDebut }} - {{ s.heureFin }} · {{ s.capaciteMax }} places</p>
+    <button type="button" (click)="afficherReservations(s.id)">Voir les réservations</button>
+
+    @if (voir() === s.id) {
+      @for (r of reservations(); track r.id) {
+        <p>{{ r.sportif }} · {{ r.statut }}</p>
+      } @empty {
+        <p>Aucune réservation.</p>
+      }
+    }
+  </div>
+} @empty {
+  <p>Aucune séance dans vos salles.</p>
+}

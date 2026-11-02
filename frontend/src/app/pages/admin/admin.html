@@ -1,0 +1,64 @@
+<h1>Espace administrateur</h1>
+
+@if (message()) {
+  <p class="succes">{{ message() }}</p>
+}
+@if (erreur()) {
+  <p class="erreur">{{ erreur() }}</p>
+}
+
+<h2>Utilisateurs</h2>
+<table>
+  <thead>
+    <tr>
+      <th>Nom</th>
+      <th>Email</th>
+      <th>Rôles</th>
+      <th>Email vérifié</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    @for (u of users(); track u.id) {
+      <tr>
+        <td>{{ u.prenom }} {{ u.nom }}</td>
+        <td>{{ u.email }}</td>
+        <td>{{ u.roles.join(', ') }}</td>
+        <td>{{ u.verifie ? 'Oui' : 'Non' }}</td>
+        <td>
+          @if (!u.verifie) {
+            <button type="button" (click)="verifier(u.id)">Valider</button>
+          }
+          <button type="button" (click)="supprimer(u.id)">Supprimer</button>
+        </td>
+      </tr>
+    }
+  </tbody>
+</table>
+<h2>Modération des avis</h2>
+<table>
+  <thead>
+    <tr>
+      <th>Note</th>
+      <th>Commentaire</th>
+      <th>Statut</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    @for (a of avis(); track a.id) {
+      <tr>
+        <td>{{ a.note }}/5</td>
+        <td>{{ a.commentaire }}</td>
+        <td>{{ a.statut === 'masque' ? 'Masqué' : 'Visible' }}</td>
+        <td>
+          <button type="button" (click)="moderer(a)">
+            {{ a.statut === 'masque' ? 'Afficher' : 'Masquer' }}
+          </button>
+        </td>
+      </tr>
+    } @empty {
+      <tr><td colspan="4">Aucun avis.</td></tr>
+    }
+  </tbody>
+</table>

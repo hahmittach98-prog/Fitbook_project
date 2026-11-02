@@ -1,0 +1,20 @@
+@if (erreur()) {
+  <p class="erreur">{{ erreur() }}</p>
+}
+
+@if (salle(); as s) {
+  <h1>{{ s.nom }}</h1>
+  <p>{{ s.adresse }}, {{ s.ville }}</p>
+  <p>Capacité : {{ s.capacite }} personnes</p>
+  <p>Téléphone : {{ s.telephone }}</p>
+  <p>{{ s.description }}</p>
+
+  <h2>Cours proposés</h2>
+  @for (c of cours(); track c.id) {
+    <p>{{ c.nom }} ({{ c.niveau }})</p>
+  } @empty {
+    <p>Aucun cours associé pour le moment.</p>
+  }
+
+  <app-avis [salleId]="id" />
+}

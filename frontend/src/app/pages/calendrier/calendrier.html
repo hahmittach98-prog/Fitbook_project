@@ -1,0 +1,53 @@
+<h1>Calendrier des séances</h1>
+
+<div class="navigation">
+  <button type="button" (click)="precedent()">◀</button>
+  <strong>{{ titre() }}</strong>
+  <button type="button" (click)="suivant()">▶</button>
+</div>
+
+<div class="grille entete">
+  @for (j of jours; track j) {
+    <div>{{ j }}</div>
+  }
+</div>
+
+<div class="grille">
+  @for (c of grille(); track $index) {
+    @if (c) {
+      <button type="button" class="jour" [class.avec]="c.seances.length" [class.choisi]="choisi() === c.cle" (click)="choisir(c.cle)">
+        <span>{{ c.jour }}</span>
+        @if (c.seances.length) {
+          <small>{{ c.seances.length }} séance(s)</small>
+        }
+      </button>
+    } @else {
+      <div class="vide"></div>
+    }
+  }
+</div>
+
+@if (message()) {
+  <p class="succes">{{ message() }}</p>
+}
+@if (erreur()) {
+  <p class="erreur">{{ erreur() }}</p>
+}
+
+@if (choisi()) {
+  <h2>Séances du {{ choisi() }}</h2>
+  @for (s of seancesDuJour(); track s.id) {
+    <div class="carte">
+      <h3>{{ s.coursNom }}</h3>
+      <p>{{ s.salleNom }} · {{ s.heureDebut }} - {{ s.heureFin }}</p>
+      <p>{{ s.prix }} € · {{ s.capaciteMax }} places maximum</p>
+      @if (api.connecte()) {
+        <button type="button" (click)="reserver(s.id)">Réserver</button>
+      } @else {
+        <p>Connectez-vous pour réserver.</p>
+      }
+    </div>
+  } @empty {
+    <p>Aucune séance ce jour-là.</p>
+  }
+}

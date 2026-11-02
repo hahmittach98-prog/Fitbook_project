@@ -1,0 +1,12 @@
+@if (erreur()) {
+  <p class="erreur">{{ erreur() }}</p>
+}
+
+@if (coach(); as c) {
+  <h1>{{ c.prenom }} {{ c.nom }}</h1>
+  <p>Spécialité : {{ c.specialite }}</p>
+  <p>{{ c.description }}</p>
+  <p>Tarif : {{ c.tarifHoraire }} € / heure</p>
+
+  <app-avis [coachId]="id" />
+}

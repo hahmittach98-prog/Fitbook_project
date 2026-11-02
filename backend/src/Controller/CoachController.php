@@ -18,6 +18,7 @@ class CoachController extends AbstractController
     {
         return [
             'id' => $c->getId(),
+            'userId' => $c->getUser()?->getId(),
             'nom' => $c->getUser()?->getNom(),
             'prenom' => $c->getUser()?->getPrenom(),
             'specialite' => $c->getSpecialite(),
