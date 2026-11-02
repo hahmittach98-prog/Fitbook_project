@@ -140,6 +140,14 @@ export class Api {
     return this.http.put(`${API}/salles/${id}`, data);
   }
 
+    creerCours(data: any): Observable<any> {
+    return this.http.post(`${API}/cours`, data);
+  }
+
+  supprimerCours(id: number): Observable<any> {
+    return this.http.delete(`${API}/cours/${id}`);
+  }
+
   login(email: string, password: string): Observable<{ token: string }> {
     return this.http.post<{ token: string }>(`${API}/login`, { email, password }).pipe(
       tap((reponse) => {

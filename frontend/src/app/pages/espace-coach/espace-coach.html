@@ -1,0 +1,66 @@
+<h1>Espace coach</h1>
+
+@if (message()) {
+  <p class="succes">{{ message() }}</p>
+}
+@if (erreur()) {
+  <p class="erreur">{{ erreur() }}</p>
+}
+@if (profilManquant()) {
+  <h2>Compléter mon profil coach</h2>
+  <p>Avant de créer des séances, indiquez votre spécialité.</p>
+  <form (ngSubmit)="creerProfil()">
+    <label>Spécialité <input type="text" name="specialite" [(ngModel)]="profil.specialite" required /></label>
+    <label>Description <textarea name="description" [(ngModel)]="profil.description"></textarea></label>
+    <label>Tarif horaire (€) <input type="number" name="tarifHoraire" [(ngModel)]="profil.tarifHoraire" min="0" /></label>
+    <button type="submit">Créer mon profil</button>
+  </form>
+}
+@if (coach()) {
+  <h2>Créer une séance</h2>
+  <form (ngSubmit)="creer()">
+    <label>Cours
+      <select name="coursId" [(ngModel)]="form.coursId" required>
+        <option value="">Choisir</option>
+        @for (c of cours(); track c.id) {
+          <option [value]="c.id">{{ c.nom }}</option>
+        }
+      </select>
+    </label>
+    <label>Salle
+      <select name="salleId" [(ngModel)]="form.salleId" required>
+        <option value="">Choisir</option>
+        @for (s of salles(); track s.id) {
+          <option [value]="s.id">{{ s.nom }} ({{ s.ville }})</option>
+        }
+      </select>
+    </label>
+    <label>Date <input type="date" name="date" [(ngModel)]="form.date" required /></label>
+    <label>Début <input type="time" name="heureDebut" [(ngModel)]="form.heureDebut" required /></label>
+    <label>Fin <input type="time" name="heureFin" [(ngModel)]="form.heureFin" required /></label>
+    <label>Places <input type="number" name="capaciteMax" [(ngModel)]="form.capaciteMax" min="1" required /></label>
+    <label>Prix (€) <input type="number" name="prix" [(ngModel)]="form.prix" min="0" required /></label>
+    <button type="submit">Créer la séance</button>
+  </form>
+
+  <h2>Mes séances</h2>
+  @for (s of seances(); track s.id) {
+    <div class="carte">
+      <h3>{{ s.coursNom }}</h3>
+      <p>{{ s.date }} · {{ s.heureDebut }} - {{ s.heureFin }} · {{ s.salleNom }}</p>
+      <p>{{ s.prix }} € · {{ s.capaciteMax }} places</p>
+      <button type="button" (click)="afficherReservations(s.id)">Voir les réservations</button>
+      <button type="button" (click)="supprimer(s.id)">Supprimer</button>
+
+      @if (voir() === s.id) {
+        @for (r of reservations(); track r.id) {
+          <p>{{ r.sportif }} · {{ r.statut }}</p>
+        } @empty {
+          <p>Aucune réservation.</p>
+        }
+      }
+    </div>
+  } @empty {
+    <p>Vous n'avez pas encore de séance.</p>
+  }
+}
