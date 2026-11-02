@@ -62,3 +62,33 @@
     }
   </tbody>
 </table>
+<h2>Cours</h2>
+<form (ngSubmit)="creerCours()">
+  <label>Nom <input type="text" name="nom" [(ngModel)]="formCours.nom" required /></label>
+  <label>Niveau <input type="text" name="niveau" [(ngModel)]="formCours.niveau" placeholder="ex : debutant" required /></label>
+  <label>Description <textarea name="description" [(ngModel)]="formCours.description"></textarea></label>
+  <button type="submit">Ajouter le cours</button>
+</form>
+
+<table>
+  <thead>
+    <tr>
+      <th>Nom</th>
+      <th>Niveau</th>
+      <th>Description</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    @for (c of cours(); track c.id) {
+      <tr>
+        <td>{{ c.nom }}</td>
+        <td>{{ c.niveau }}</td>
+        <td>{{ c.description }}</td>
+        <td><button type="button" (click)="supprimerCours(c.id)">Supprimer</button></td>
+      </tr>
+    } @empty {
+      <tr><td colspan="4">Aucun cours.</td></tr>
+    }
+  </tbody>
+</table>

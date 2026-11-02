@@ -1,9 +1,10 @@
 import { Component, inject, signal } from '@angular/core';
 import { Api } from '../../services/api';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-admin',
-  imports: [],
+  imports: [FormsModule],
   templateUrl: './admin.html',
   styleUrl: './admin.css'
 })
@@ -14,10 +15,13 @@ export class Admin {
   erreur = signal('');
   message = signal('');
   avis = signal<any[]>([]);
+  cours = signal<any[]>([]);
+  formCours = { nom: '', description: '', niveau: '' };
 
   constructor() {
     this.charger();
     this.chargerAvis();
+    this.chargerCours();
   }
 
   charger() {
@@ -63,6 +67,38 @@ export class Admin {
         this.chargerAvis();
       },
       error: () => this.erreur.set('Modération impossible.')
+    });
+  }
+    chargerCours() {
+    this.api.getCours().subscribe((data) => this.cours.set(data));
+  }
+
+  creerCours() {
+    this.erreur.set('');
+    this.message.set('');
+    const f = this.formCours;
+    this.api.creerCours({
+      nom: f.nom,
+      description: f.description || null,
+      niveau: f.niveau
+    }).subscribe({
+      next: () => {
+        this.message.set('Cours créé.');
+        this.formCours = { nom: '', description: '', niveau: '' };
+        this.chargerCours();
+      },
+      error: (e) => this.erreur.set(e.error?.erreur ?? 'Création du cours impossible.')
+    });
+  }
+
+  supprimerCours(id: number) {
+    if (!confirm('Supprimer ce cours ?')) return;
+    this.api.supprimerCours(id).subscribe({
+      next: () => {
+        this.message.set('Cours supprimé.');
+        this.chargerCours();
+      },
+      error: () => this.erreur.set('Suppression impossible (le cours est utilisé par des séances).')
     });
   }
 }
