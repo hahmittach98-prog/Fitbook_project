@@ -3,10 +3,11 @@ import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { Api } from '../../services/api';
 import { Etoile } from '../../components/etoile/etoile';
+import { Photo } from '../../components/photo/photo';
 
 @Component({
   selector: 'app-salles',
-  imports: [FormsModule, RouterLink, Etoile],
+  imports: [FormsModule, RouterLink, Etoile, Photo],
   templateUrl: './salles.html',
   styleUrl: './salles.css'
 })

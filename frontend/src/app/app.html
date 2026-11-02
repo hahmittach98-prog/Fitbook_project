@@ -1,32 +1,46 @@
 <nav>
-  <a routerLink="/salles" class="logo">FitBook</a>
-  <a routerLink="/salles">Salles</a>
-  <a routerLink="/coachs">Coachs</a>
-  <a routerLink="/cours">Cours</a>
-  <a routerLink="/seances">Séances</a>
-  <a routerLink="/calendrier">Calendrier</a>
+  <a class="logo" routerLink="/">FitBook</a>
 
+  <input type="checkbox" id="burger" class="burger-case" />
+  <label for="burger" class="burger" aria-label="Ouvrir le menu">☰</label>
+
+  <div class="liens">
+    <a routerLink="/salles">Salles</a>
+    <a routerLink="/coachs">Coachs</a>
+    <a routerLink="/cours">Cours</a>
+    <a routerLink="/seances">Séances</a>
+    <a routerLink="/calendrier">Calendrier</a>
+  </div>
+
+  <div class="compte">
     @if (api.connecte()) {
-    <a routerLink="/reservations">Mes réservations</a>
-    <a routerLink="/profil">Profil</a>
-        @if (api.aRole('ROLE_ADMIN')) {
-      <a routerLink="/admin">Espace admin</a>
-
+      <details class="menu-espace">
+        <summary>Mon espace</summary>
+        <div class="menu-liste">
+          <a routerLink="/profil">Mon profil</a>
+          <a routerLink="/reservations">Mes réservations</a>
+          <a routerLink="/favoris">Mes favoris</a>
+          @if (api.aRole('ROLE_COACH')) {
+            <a routerLink="/espace-coach">Espace coach</a>
+          }
+          @if (api.aRole('ROLE_SALLE')) {
+            <a routerLink="/espace-salle">Espace salle</a>
+          }
+          @if (api.aRole('ROLE_ADMIN')) {
+            <a routerLink="/admin">Espace admin</a>
+          }
+        </div>
+      </details>
+      <button type="button" (click)="deconnexion()">Déconnexion</button>
+    } @else {
+      <a routerLink="/connexion">Connexion</a>
+      <a routerLink="/inscription" class="bouton-lien">Inscription</a>
     }
-        @if (api.aRole('ROLE_COACH')) {
-      <a routerLink="/espace-coach">Espace coach</a>
-    }
-        @if (api.aRole('ROLE_SALLE')) {
-      <a routerLink="/espace-salle">Espace salle</a>
-    }
-    <a routerLink="/favoris">Mes favoris</a>
-    <button type="button" (click)="deconnexion()">Déconnexion</button>
-  } @else {
-    <a routerLink="/connexion">Connexion</a>
-    <a routerLink="/inscription">Inscription</a>
-  }
+  </div>
 </nav>
 
 <main>
   <router-outlet />
 </main>
+
+<footer>FitBook, projet UAA MI08, Cfitech</footer>

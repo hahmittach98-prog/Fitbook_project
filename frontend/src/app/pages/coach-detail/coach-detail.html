@@ -1,12 +1,22 @@
+<a class="retour" routerLink="/coachs">Retour aux coachs</a>
+
 @if (erreur()) {
   <p class="erreur">{{ erreur() }}</p>
 }
 
 @if (coach(); as c) {
-  <h1>{{ c.prenom }} {{ c.nom }}</h1>
-  <p>Spécialité : {{ c.specialite }}</p>
-  <p>{{ c.description }}</p>
-  <p>Tarif : {{ c.tarifHoraire }} € / heure</p>
+  <div class="carte fiche">
+    <div class="rond grand"><app-photo dossier="coachs" [nom]="c.imageName" /></div>
+    <div class="fiche-texte">
+      <h1>{{ c.prenom }} {{ c.nom }}</h1>
+      <app-etoile [type]="'coachs'" [id]="c.id" />
+      <p class="specialite">{{ c.specialite }}</p>
+      <p class="description">{{ c.description }}</p>
+      <p class="prix">{{ c.tarifHoraire }} € / heure</p>
+    </div>
+  </div>
 
-  <app-avis [coachId]="id" />
+  <div class="panneau">
+    <app-avis [coachId]="id" />
+  </div>
 }

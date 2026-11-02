@@ -1,14 +1,35 @@
 <h1>Mon profil</h1>
 
+@if (message()) {
+  <p class="succes">{{ message() }}</p>
+}
 @if (erreur()) {
   <p class="erreur">{{ erreur() }}</p>
 }
 
 @if (profil(); as p) {
-  <div class="carte">
-    <p><strong>Nom :</strong> {{ p.nom }}</p>
-    <p><strong>Prénom :</strong> {{ p.prenom }}</p>
-    <p><strong>Email :</strong> {{ p.email }}</p>
-    <p><strong>Téléphone :</strong> {{ p.telephone }}</p>
+  <div class="profil-carte">
+    <div class="profil-photo">
+      <app-photo dossier="users" [nom]="p.imageName" />
+      <app-telechargement type="profil" (envoye)="photoEnvoyee($event)" />
+    </div>
+
+    <div class="profil-infos">
+      @if (!edition()) {
+        <p><strong>Nom :</strong> {{ p.nom }}</p>
+        <p><strong>Prénom :</strong> {{ p.prenom }}</p>
+        <p><strong>Email :</strong> {{ p.email }}</p>
+        <p><strong>Téléphone :</strong> {{ p.telephone }}</p>
+        <button type="button" (click)="modifier()">Modifier mon profil</button>
+      } @else {
+        <form (ngSubmit)="enregistrer()">
+          <label>Nom <input type="text" name="nom" [(ngModel)]="form.nom" required /></label>
+          <label>Prénom <input type="text" name="prenom" [(ngModel)]="form.prenom" required /></label>
+          <label>Téléphone <input type="text" name="telephone" [(ngModel)]="form.telephone" /></label>
+          <button type="submit">Enregistrer</button>
+          <button type="button" (click)="annuler()">Annuler</button>
+        </form>
+      }
+    </div>
   </div>
 }

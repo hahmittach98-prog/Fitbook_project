@@ -10,13 +10,16 @@
   <p class="erreur">{{ erreur() }}</p>
 }
 
-<div class="liste">
+<div class="liste petites">
   @for (c of cours(); track c.id) {
     <div class="carte">
       <h2>{{ c.nom }}</h2>
       <app-etoile [type]="'cours'" [id]="c.id" />
       <p>Niveau : {{ c.niveau }}</p>
-      <p>{{ c.description }}</p>
+      <details>
+        <summary>Voir plus</summary>
+        <p>{{ c.description }}</p>
+      </details>
     </div>
   } @empty {
     <p>Aucun cours pour le moment.</p>

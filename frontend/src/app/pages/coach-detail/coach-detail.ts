@@ -1,11 +1,13 @@
 import { Component, inject, signal } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Api } from '../../services/api';
 import { Avis } from '../../components/avis/avis';
+import { Photo } from '../../components/photo/photo';
+import { Etoile } from '../../components/etoile/etoile';
 
 @Component({
   selector: 'app-coach-detail',
-  imports: [Avis],
+  imports: [RouterLink, Avis, Photo, Etoile],
   templateUrl: './coach-detail.html',
   styleUrl: './coach-detail.css'
 })

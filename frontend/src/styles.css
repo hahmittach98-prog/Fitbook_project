@@ -1,1 +1,570 @@
-/* You can add global styles to this file, and also import other style files */
+/* =====================================================
+   FitBook : style général du site (thème sombre)
+   Ce fichier contient tout ce qui est commun aux pages.
+   Ordre : couleurs, base, menu, cartes, photos, pages,
+   espaces, calendrier, messages, responsive.
+   ===================================================== */
+
+
+/* ---------- 1. Couleurs et polices ----------
+   Je les mets ici pour pouvoir les changer à un seul endroit. */
+:root {
+  --fond: #1b1e24;
+  --carte: #20242c;
+  --trait: #2f3540;
+  --texte: #e7e9ee;
+  --texte-doux: #a3a9b5;
+  --laiton: #c2a36b;          /* la couleur d'accent (doré mat) */
+  --laiton-clair: #d3b77f;    /* le même doré, au survol */
+  --police-titre: 'Barlow Condensed', 'Arial Narrow', system-ui, sans-serif;
+  --police-texte: 'Barlow', system-ui, sans-serif;
+}
+
+
+/* ---------- 2. Base du site ---------- */
+
+/* la largeur d'un élément comprend son padding et sa bordure */
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: var(--police-texte);
+  line-height: 1.45;
+  background: var(--fond);
+  color: var(--texte);
+  color-scheme: dark;         /* formulaires et barres de défilement sombres */
+}
+
+h1, h2, h3 {
+  font-family: var(--police-titre);
+  font-weight: 700;
+  line-height: 1.1;
+  margin: 0 0 8px;
+}
+h1 { font-size: 2rem; margin-bottom: 14px; }
+h2 { font-size: 1.4rem; margin-top: 22px; }
+h3 { font-size: 1.2rem; }
+
+a { color: var(--laiton); text-underline-offset: 3px; }
+
+/* le contour qu'on voit quand on navigue au clavier */
+:focus-visible { outline: 2px solid var(--laiton); outline-offset: 2px; }
+
+/* le contenu des pages est centré et pas trop large */
+main { max-width: 1180px; margin: 0 auto; padding: 18px 16px; }
+
+footer {
+  padding: 14px 20px;
+  text-align: center;
+  color: var(--texte-doux);
+  font-size: 0.9rem;
+  border-top: 1px solid var(--trait);
+  margin-top: 24px;
+}
+
+
+/* ---------- 3. Menu du haut ---------- */
+
+/* le menu reste collé en haut quand on descend dans la page */
+nav {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 16px;
+  padding: 10px 20px;
+  background: #191c22;
+  border-bottom: 1px solid var(--trait);
+}
+nav a {
+  color: var(--texte-doux);
+  text-decoration: none;
+  padding: 4px 0;
+  border-bottom: 2px solid transparent;
+}
+nav a:hover { color: var(--texte); border-bottom-color: var(--laiton); }
+
+nav .logo {
+  font-family: var(--police-titre);
+  font-weight: 800;
+  font-size: 1.6rem;
+  color: var(--laiton);
+  margin-right: 10px;
+  border-bottom: none;
+}
+
+/* les liens à gauche, le compte (connexion / déconnexion) tout à droite */
+.liens { display: flex; gap: 16px; flex: 1; }
+.compte { display: flex; align-items: center; gap: 14px; margin-left: auto; }
+
+/* le hamburger est caché sur ordinateur, on l'affiche sur mobile (voir plus bas) */
+.burger-case { display: none; }
+.burger {
+  display: none;
+  margin: 0 0 0 auto;
+  padding: 0 6px;
+  font-size: 1.7rem;
+  cursor: pointer;
+  color: var(--texte);
+}
+
+/* le menu "Mon espace" qui se déroule */
+.menu-espace { position: relative; }
+.menu-espace summary { cursor: pointer; color: var(--texte-doux); list-style: none; }
+.menu-espace summary::-webkit-details-marker { display: none; }
+.menu-espace summary::after { content: " ▾"; }
+.menu-espace[open] summary { color: var(--texte); }
+
+.menu-liste {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 10px);
+  min-width: 200px;
+  display: flex;
+  flex-direction: column;
+  background: var(--carte);
+  border: 1px solid var(--trait);
+  border-radius: 8px;
+  padding: 6px;
+  z-index: 20;
+}
+.menu-liste a { padding: 7px 10px; border-radius: 4px; border-bottom: none; }
+.menu-liste a:hover { background: #2a2f39; }
+
+/* un lien qui a l'allure d'un bouton (ex : Inscription, Réserver une séance) */
+.bouton-lien {
+  display: inline-block;
+  background: var(--laiton);
+  color: #1a1d22;
+  font-weight: 600;
+  padding: 6px 14px;
+  border-radius: 6px;
+  text-decoration: none;
+}
+nav a.bouton-lien { color: #1a1d22; border-bottom: none; padding: 6px 14px; }
+.bouton-lien:hover,
+nav a.bouton-lien:hover { background: var(--laiton-clair); color: #1a1d22; }
+
+/* version "discrète" : juste un contour */
+.bouton-lien.discret,
+nav a.bouton-lien.discret {
+  background: transparent;
+  color: var(--texte);
+  border: 1px solid var(--texte-doux);
+}
+.bouton-lien.discret:hover { background: #2a2f39; color: var(--texte); }
+
+
+/* ---------- 4. Boutons et formulaires ---------- */
+
+button {
+  font: inherit;
+  font-weight: 600;
+  background: var(--laiton);
+  color: #1a1d22;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 14px;
+  cursor: pointer;
+}
+button:hover { background: var(--laiton-clair); }
+
+/* les boutons dans les tableaux sont un peu plus petits */
+td button { padding: 4px 12px; font-size: 0.9rem; }
+
+label {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  margin-bottom: 8px;
+  color: var(--texte-doux);
+}
+input, select, textarea {
+  font: inherit;
+  padding: 7px 10px;
+  border: 1px solid var(--trait);
+  border-radius: 6px;
+  background: #15181d;
+  color: var(--texte);
+}
+input:focus, select:focus, textarea:focus { outline: none; border-color: var(--laiton); }
+form { max-width: 460px; }
+
+/* la barre de recherche des listes (salles, coachs, cours...) */
+.recherche {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: end;
+  max-width: none;
+  margin-bottom: 18px;
+}
+.recherche label { margin: 0; }
+
+/* formulaire en deux colonnes (créer une séance) */
+.form-grille { display: grid; grid-template-columns: 1fr 1fr; gap: 0 12px; max-width: none; }
+.form-grille .large { grid-column: 1 / -1; }           /* un champ sur toute la largeur */
+.form-grille button { grid-column: 1 / -1; justify-self: start; margin-top: 6px; }
+
+/* la petite liste déroulante de la note (avis) */
+app-avis select,
+app-avis input[type="number"] {
+  align-self: flex-start;
+  width: auto;
+  min-width: 70px;
+  padding: 4px 8px;
+}
+
+
+/* ---------- 5. Cartes et listes ---------- */
+
+/* ces pages affichent leurs cartes en grille.
+   Le titre et le formulaire prennent toute la ligne, seules les cartes se rangent côte à côte */
+app-salles, app-coachs, app-cours, app-seances, app-reservations,
+app-mes-favoris, app-espace-coach {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 18px;
+  align-items: start;
+}
+app-salles > *, app-coachs > *, app-cours > *, app-seances > *, app-reservations > *,
+app-mes-favoris > *, app-espace-coach > * { grid-column: 1 / -1; }
+app-salles > .carte, app-coachs > .carte, app-cours > .carte, app-seances > .carte,
+app-reservations > .carte, app-mes-favoris > .carte, app-espace-coach > .carte { grid-column: auto; }
+
+/* la grille des cartes (plusieurs par ligne, avec de l'espace entre elles) */
+.liste {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(340px, 100%), 1fr));
+  gap: 22px;
+  align-items: start;
+}
+.liste.petites {
+  grid-template-columns: repeat(auto-fill, minmax(min(210px, 100%), 1fr));
+  gap: 18px;
+}
+
+.carte {
+  position: relative;         /* pour placer l'étoile dans le coin */
+  background: var(--carte);
+  border: 1px solid var(--trait);
+  border-radius: 10px;
+  padding: 12px 14px;
+}
+.carte:hover { border-color: var(--laiton); }
+.carte h2 { margin: 0 0 6px; font-size: 1.35rem; padding-right: 30px; }
+.carte h3 { padding-right: 28px; }
+.carte p { margin: 0 0 6px; color: var(--texte-doux); }
+.carte.centre { text-align: center; }
+
+/* carte avec la photo à gauche et le texte à droite (salles, coachs) */
+.horizontale { display: flex; gap: 16px; padding: 0; overflow: hidden; }
+.horizontale app-photo { flex: 0 0 140px; display: block; }
+.horizontale .photo { width: 100%; height: 100%; min-height: 150px; margin: 0; border-radius: 0; }
+.horizontale .texte { flex: 1; padding: 12px 14px 12px 0; min-width: 0; }
+
+/* pour les coachs : la photo est ronde */
+.horizontale .rond { flex: 0 0 96px; align-self: center; padding-left: 14px; }
+.horizontale .rond app-photo { flex: none; }
+.horizontale .rond .photo { width: 84px; height: 84px; min-height: 0; border-radius: 50%; margin: 0; }
+.horizontale .rond + .texte { padding-left: 0; }
+
+/* texte des coachs */
+.specialite {
+  color: var(--laiton);
+  font-family: var(--police-titre);
+  font-size: 1.15rem;
+  letter-spacing: 0.02em;
+  margin: 0 0 4px;
+}
+/* la description est coupée après 2 lignes (la suite est sur la page détail) */
+.court {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* "Voir plus" qui déroule le texte */
+details summary { cursor: pointer; color: var(--laiton); font-weight: 600; }
+details p { margin-top: 6px; }
+
+/* l'étoile des favoris : dans le coin en haut à droite, sans fond */
+app-etoile { position: absolute; top: 10px; right: 12px; }
+app-etoile button {
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: 1.5rem;
+  line-height: 1;
+  color: var(--laiton);
+  cursor: pointer;
+}
+app-etoile button:hover { background: none; color: var(--laiton-clair); }
+
+
+/* ---------- 6. Photos ---------- */
+
+.photo {
+  display: block;
+  width: 100%;
+  max-width: none;
+  height: 130px;
+  object-fit: cover;          /* l'image remplit le cadre sans être déformée */
+  border-radius: 6px;
+  margin-bottom: 8px;
+  background: var(--trait);   /* gris quand il n'y a pas de photo */
+}
+.rond .photo { width: 84px; height: 84px; border-radius: 50%; margin: 0 auto 8px; }
+.mini .photo { width: 56px; height: 40px; border-radius: 4px; margin: 0; }
+
+/* le bouton "Choisir une photo" + "Enregistrer la photo" */
+.telechargement { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.telechargement button { padding: 4px 12px; font-size: 0.9rem; }
+.telechargement .choisir {
+  display: inline-block;
+  margin: 0;
+  padding: 4px 12px;
+  font-size: 0.9rem;
+  border: 1px solid var(--laiton);
+  border-radius: 6px;
+  color: var(--laiton);
+  font-weight: 600;
+  cursor: pointer;
+}
+.telechargement .choisir:hover { background: #29271f; }
+.nom-fichier {
+  font-size: 0.85rem;
+  color: var(--texte-doux);
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+
+/* ---------- 7. Page d'accueil ---------- */
+
+/* grande bannière : l'image est assombrie à gauche pour que le texte reste lisible */
+.hero {
+  min-height: 400px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 40px 32px;
+  margin-bottom: 8px;
+  border-radius: 12px;
+  background:
+    linear-gradient(90deg, rgba(20, 22, 27, 0.88) 0%, rgba(20, 22, 27, 0.5) 55%, rgba(20, 22, 27, 0.15) 100%),
+    url('/accueil.jpg') center / cover no-repeat,
+    radial-gradient(circle at 80% 20%, #3a3426 0%, #20242c 60%);   /* si l'image manque */
+}
+.hero h1 { font-size: clamp(2.2rem, 6vw, 3.6rem); max-width: 14ch; }
+.hero p { max-width: 46ch; color: var(--texte); font-size: 1.1rem; margin: 0 0 18px; }
+.hero-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+
+/* titre d'une section ("Nos cours") avec "Voir tout" à droite */
+.titre-section { display: flex; justify-content: space-between; align-items: center; margin-top: 24px; }
+.titre-section h2 { margin: 0; }
+.rangee { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 16px; }
+
+
+/* ---------- 8. Pages détail (salle et coach) ---------- */
+
+.retour { display: inline-block; margin-bottom: 12px; }
+.fiche { display: flex; gap: 28px; align-items: flex-start; padding: 20px; margin-bottom: 18px; }
+.fiche-texte { flex: 1; min-width: 0; }
+.fiche-texte h1 { margin-bottom: 4px; padding-right: 36px; }
+.fiche-texte h2 { margin-top: 18px; font-size: 1.2rem; }
+.fiche .description { max-width: 62ch; line-height: 1.65; color: var(--texte); margin: 10px 0; }
+.fiche .prix { font-family: var(--police-titre); font-size: 1.4rem; color: var(--laiton); }
+.fiche-photo { flex: 0 0 280px; }
+.fiche-photo .photo { height: 230px; margin: 0; }
+.rond.grand { flex: 0 0 160px; padding: 0; }
+.rond.grand .photo { width: 150px; height: 150px; border-radius: 50%; margin: 0; }
+
+
+/* ---------- 9. Profil ---------- */
+
+app-profil h1 { text-align: center; }
+.profil-carte {
+  display: flex;
+  gap: 32px;
+  align-items: flex-start;
+  justify-content: center;
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 24px;
+  background: var(--carte);
+  border: 1px solid var(--trait);
+  border-radius: 12px;
+}
+.profil-photo { display: flex; flex-direction: column; align-items: center; gap: 10px; flex: 0 0 220px; }
+.profil-photo .photo { width: 200px; height: 200px; margin: 0; border-radius: 12px; }
+
+/* le texte est centré par rapport à la photo (200px de haut) */
+.profil-infos {
+  flex: 1;
+  min-height: 200px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.profil-infos p { margin: 0 0 8px; }
+.profil-infos button { align-self: flex-start; }
+
+
+/* ---------- 10. Espaces coach, salle et admin ---------- */
+
+/* formulaire à gauche, tableau à droite */
+.deux-colonnes {
+  display: grid;
+  grid-template-columns: minmax(260px, 340px) 1fr;
+  gap: 20px;
+  align-items: start;
+  margin-bottom: 8px;
+}
+.panneau {
+  background: var(--carte);
+  border: 1px solid var(--trait);
+  border-radius: 10px;
+  padding: 14px;
+  overflow-x: auto;           /* le tableau défile si l'écran est trop petit */
+}
+.panneau h2 { margin-top: 0; }
+.espace-haut { margin-top: 20px; }
+
+/* les boutons d'un tableau (Modifier, Photo, Réservations...) avec un espace entre eux */
+.actions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.actions .photo-menu[open] { flex-basis: 100%; margin: 4px 0 0; }
+
+/* le petit menu "Photo" dans le tableau des salles */
+.photo-menu { display: inline-block; margin-left: 6px; }
+.photo-menu summary {
+  display: inline-block;
+  cursor: pointer;
+  padding: 4px 12px;
+  font-size: 0.9rem;
+  border: 1px solid var(--laiton);
+  border-radius: 6px;
+  color: var(--laiton);
+  font-weight: 600;
+  list-style: none;
+}
+.photo-menu summary::-webkit-details-marker { display: none; }
+.photo-menu[open] { display: block; width: 100%; margin: 8px 0 0; }   /* s'ouvre sur sa ligne */
+.photo-menu .telechargement {
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 6px;
+  margin-top: 8px;
+}
+.photo-menu .nom-fichier { max-width: 120px; }
+.photo-menu .succes { margin: 0; padding: 3px 8px; font-size: 0.85rem; }
+
+/* les noms des sportifs qui ont réservé */
+.pastille {
+  display: inline-block;
+  background: #2a2f39;
+  border-radius: 999px;
+  padding: 2px 10px;
+  margin: 2px 4px 2px 0;
+}
+
+
+/* ---------- 11. Tableaux ---------- */
+
+table { width: 100%; border-collapse: collapse; background: var(--carte); }
+th, td { padding: 8px 10px; text-align: left; border-bottom: 1px solid var(--trait); vertical-align: middle; }
+th {
+  background: #2a2f39;
+  font-family: var(--police-titre);
+  font-weight: 700;
+  font-size: 1.05rem;
+}
+
+
+/* ---------- 12. Connexion et inscription ---------- */
+
+app-connexion, app-inscription { display: block; text-align: center; }
+app-connexion form, app-inscription form { margin: 0 auto; text-align: left; }
+
+
+/* ---------- 13. Calendrier ---------- */
+
+.jour {
+  background: var(--carte);
+  color: var(--texte);
+  border: 1px solid var(--trait);
+  border-radius: 6px;
+  font-weight: 500;
+}
+.jour small { color: var(--texte-doux); font-weight: 400; }
+.jour:hover { background: #2a2f39; }
+.jour.avec, .jour.avec:hover { border-color: var(--laiton); background: #29271f; }   /* jour avec une séance */
+.jour.choisi, .jour.choisi:hover { background: var(--laiton); color: #1a1d22; }      /* jour sélectionné */
+.jour.choisi small { color: #1a1d22; }
+
+
+/* ---------- 14. Messages (succès et erreur) ---------- */
+
+.succes { background: #1f2d25; border-left: 4px solid #5aa377; color: #bfe3cc; padding: 6px 10px; }
+.erreur { background: #33201f; border-left: 4px solid #c0605a; color: #f0c3c0; padding: 6px 10px; }
+
+
+/* ---------- 15. Responsive (tablette et mobile) ---------- */
+/* Ces règles sont à la fin pour être sûre qu'elles passent après les autres. */
+
+@media (max-width: 800px) {
+  /* menu hamburger : les liens passent sous le logo, l'un en dessous de l'autre */
+  nav { gap: 2px 10px; }
+  nav .logo { font-size: 1.4rem; }
+  .burger { display: block; }
+  .liens, .compte {
+    display: none;
+    flex: none;
+    width: 100%;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+    margin-left: 0;
+  }
+  .burger-case:checked ~ .liens,
+  .burger-case:checked ~ .compte { display: flex; }          /* affichés quand on coche le hamburger */
+  .liens a, .compte a, .menu-espace summary { font-size: 0.95rem; padding: 3px 0; }
+  .compte { padding-top: 6px; border-top: 1px solid var(--trait); }
+  .compte button { align-self: flex-start; padding: 3px 10px; font-size: 0.9rem; }
+  nav a.bouton-lien { padding: 3px 10px; }
+  .menu-liste { position: static; border: none; padding: 4px 0 0 10px; }
+  .menu-liste a { padding: 4px 8px; font-size: 0.92rem; }
+
+  /* les pages à deux colonnes passent sur une colonne */
+  .deux-colonnes { grid-template-columns: 1fr; }
+  .profil-carte { flex-direction: column; }
+  .profil-photo { flex: none; }
+
+  /* bannière de l'accueil plus petite */
+  .hero { min-height: 320px; padding: 28px 18px; }
+}
+
+@media (max-width: 700px) {
+  /* pages détail : la photo passe au-dessus du texte */
+  .fiche { flex-direction: column; align-items: center; }
+  .fiche-photo { flex: none; width: 100%; }
+  .fiche-texte { width: 100%; }
+}
+
+@media (max-width: 600px) {
+  nav { padding: 8px 12px; }
+  main { padding: 12px; }
+}
+
+@media (max-width: 480px) {
+  .horizontale app-photo { flex-basis: 110px; }
+  .form-grille { grid-template-columns: 1fr; }     /* formulaire sur une seule colonne */
+}
