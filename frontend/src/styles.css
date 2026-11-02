@@ -335,7 +335,7 @@ app-etoile button {
   cursor: pointer;
 }
 app-etoile button:hover { background: none; color: var(--laiton-clair); }
-
+app-mes-favoris .liste { align-items: stretch; }
 
 /* ---------- 6. Photos ---------- */
 

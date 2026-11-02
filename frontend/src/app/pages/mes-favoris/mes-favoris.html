@@ -1,31 +1,40 @@
 <h1>Mes favoris</h1>
 
 <h2>Salles</h2>
-@for (s of favoris.liste().salles; track s.id) {
-  <p>
-    <a [routerLink]="['/salles', s.id]">{{ s.nom }}</a> · {{ s.ville }}
-    <app-etoile [type]="'salles'" [id]="s.id" />
-  </p>
-} @empty {
-  <p>Aucune salle en favori.</p>
-}
+<div class="liste petites">
+  @for (s of favoris.liste().salles; track s.id) {
+    <div class="carte">
+      <h3><a [routerLink]="['/salles', s.id]">{{ s.nom }}</a></h3>
+      @if (s.ville) {
+        <p>{{ s.ville }}</p>
+      }
+      <app-etoile [type]="'salles'" [id]="s.id" />
+    </div>
+  } @empty {
+    <p>Aucune salle en favori.</p>
+  }
+</div>
 
 <h2>Coachs</h2>
-@for (c of favoris.liste().coachs; track c.id) {
-  <p>
-    <a [routerLink]="['/coachs', c.id]">{{ c.specialite }}</a>
-    <app-etoile [type]="'coachs'" [id]="c.id" />
-  </p>
-} @empty {
-  <p>Aucun coach en favori.</p>
-}
+<div class="liste petites">
+  @for (c of favoris.liste().coachs; track c.id) {
+    <div class="carte">
+      <h3><a [routerLink]="['/coachs', c.id]">{{ c.specialite }}</a></h3>
+      <app-etoile [type]="'coachs'" [id]="c.id" />
+    </div>
+  } @empty {
+    <p>Aucun coach en favori.</p>
+  }
+</div>
 
 <h2>Cours</h2>
-@for (c of favoris.liste().cours; track c.id) {
-  <p>
-    {{ c.nom }}
-    <app-etoile [type]="'cours'" [id]="c.id" />
-  </p>
-} @empty {
-  <p>Aucun cours en favori.</p>
-}
+<div class="liste petites">
+  @for (c of favoris.liste().cours; track c.id) {
+    <div class="carte">
+      <h3>{{ c.nom }}</h3>
+      <app-etoile [type]="'cours'" [id]="c.id" />
+    </div>
+  } @empty {
+    <p>Aucun cours en favori.</p>
+  }
+</div>
