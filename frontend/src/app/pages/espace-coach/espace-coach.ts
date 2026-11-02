@@ -2,11 +2,12 @@ import { Component, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Api } from '../../services/api';
 import { Disponibilites } from '../../components/disponibilites/disponibilites';
+import { Avis } from '../../components/avis/avis';
 
 
 @Component({
   selector: 'app-espace-coach',
-  imports: [FormsModule, Disponibilites],
+  imports: [FormsModule, Disponibilites, Avis],
   templateUrl: './espace-coach.html',
   styleUrl: './espace-coach.css'
 })
