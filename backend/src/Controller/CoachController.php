@@ -18,13 +18,14 @@ class CoachController extends AbstractController
     {
         return [
             'id' => $c->getId(),
+            'userId' => $c->getUser()?->getId(),
             'nom' => $c->getUser()?->getNom(),
             'prenom' => $c->getUser()?->getPrenom(),
             'specialite' => $c->getSpecialite(),
             'description' => $c->getDescription(),
             'tarifHoraire' => $c->getTarifHoraire(),
             'photo' => $c->getPhoto(),
-            'imageName' => $c->getImageName(),
+            'imageName' => $c->getUser()?->getImageName(),
             'modifieLe' => $c->getUpdatedAt()?->format('Y-m-d H:i'),
         ];
     }

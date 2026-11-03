@@ -1,0 +1,36 @@
+<a class="retour" routerLink="/salles">Retour aux salles</a>
+
+@if (erreur()) {
+  <p class="erreur">{{ erreur() }}</p>
+}
+
+@if (salle(); as s) {
+  <div class="carte fiche">
+    <div class="fiche-photo"><app-photo dossier="salles" [nom]="s.imageName" /></div>
+    <div class="fiche-texte">
+      <h1>{{ s.nom }}</h1>
+      <app-etoile [type]="'salles'" [id]="s.id" />
+      <p>{{ s.adresse }}, {{ s.ville }}</p>
+      <p>Capacité : {{ s.capacite }} personnes</p>
+      <p>Téléphone : {{ s.telephone }}</p>
+      <p class="description">{{ s.description }}</p>
+
+      <h2>Cours proposés</h2>
+      @for (c of cours(); track c.id) {
+        <span class="pastille">{{ c.nom }} ({{ c.niveau }})</span>
+      } @empty {
+        <p>Aucun cours associé pour le moment.</p>
+      }
+    </div>
+  </div>
+
+    <div class="panneau">
+    <app-disponibilites [salleId]="id" [lecture]="true" />
+  </div>
+
+  <div class="panneau">
+    <app-avis [salleId]="id" />
+  </div>
+
+
+}

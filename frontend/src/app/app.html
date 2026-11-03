@@ -1,2 +1,86 @@
+<nav>
+  <a class="logo" routerLink="/">FitBook</a>
 
-<router-outlet />
+  <input type="checkbox" id="burger" class="burger-case" />
+  <label for="burger" class="burger" aria-label="Ouvrir le menu">☰</label>
+
+  <div class="liens">
+    <a routerLink="/salles">Salles</a>
+    <a routerLink="/coachs">Coachs</a>
+    <a routerLink="/cours">Cours</a>
+    <a routerLink="/seances">Séances</a>
+    <a routerLink="/calendrier">Calendrier</a>
+  </div>
+
+  <div class="compte">
+    @if (api.connecte()) {
+      <details class="menu-espace">
+        <summary>Mon espace</summary>
+        <div class="menu-liste">
+          <a routerLink="/profil">Mon profil</a>
+                    @if (api.aRole('ROLE_COACH', 'ROLE_SALLE', 'ROLE_ADMIN')) {
+            <a routerLink="/reservations-recues">Réservations reçues</a>
+          } @else {
+            <a routerLink="/reservations">Mes réservations</a>
+            <a routerLink="/favoris">Mes favoris</a>
+          }
+          @if (api.aRole('ROLE_COACH')) {
+            <a routerLink="/espace-coach">Espace coach</a>
+          }
+          @if (api.aRole('ROLE_SALLE')) {
+            <a routerLink="/espace-salle">Espace salle</a>
+          }
+          @if (api.aRole('ROLE_ADMIN')) {
+            <a routerLink="/admin">Espace admin</a>
+          }
+        </div>
+      </details>
+      <button type="button" (click)="deconnexion()">Déconnexion</button>
+    } @else {
+      <a routerLink="/connexion">Connexion</a>
+      <a routerLink="/inscription" class="bouton-lien">Inscription</a>
+    }
+  </div>
+</nav>
+
+<main>
+  <router-outlet />
+</main>
+
+<footer>
+  <div class="footer-ligne">
+    <a class="logo" routerLink="/">FitBook</a>
+
+    <div class="footer-liens">
+      <a routerLink="/salles">Salles</a>
+      <a routerLink="/coachs">Coachs</a>
+      <a routerLink="/cours">Cours</a>
+      <a routerLink="/seances">Séances</a>
+      <a routerLink="/calendrier">Calendrier</a>
+    </div>
+
+    <div class="reseaux">
+      <a href="https://www.instagram.com" target="_blank" rel="noopener" aria-label="Instagram">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <rect x="2" y="2" width="20" height="20" rx="5" />
+          <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+          <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+        </svg>
+      </a>
+      <a href="https://www.facebook.com" target="_blank" rel="noopener" aria-label="Facebook">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
+        </svg>
+      </a>
+      <a href="https://www.linkedin.com" target="_blank" rel="noopener" aria-label="LinkedIn">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
+          <rect x="2" y="9" width="4" height="12" />
+          <circle cx="4" cy="4" r="2" />
+        </svg>
+      </a>
+    </div>
+  </div>
+
+  <div class="footer-bas">© 2026 FitBook · Projet UAA MI08 · Cfitech</div>
+</footer>

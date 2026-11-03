@@ -1,0 +1,16 @@
+<div class="telechargement">
+  <label class="choisir">
+    Choisir une photo
+    <input type="file" accept="image/*" (change)="choisir($event)" hidden />
+  </label>
+  @if (fichier) {
+    <span class="nom-fichier">{{ fichier.name }}</span>
+  }
+  <button type="button" (click)="envoyer()">Enregistrer la photo</button>
+  @if (message()) {
+    <p class="succes">{{ message() }}</p>
+  }
+  @if (erreur()) {
+    <p class="erreur">{{ erreur() }}</p>
+  }
+</div>

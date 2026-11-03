@@ -1,0 +1,48 @@
+<section class="hero">
+  <h1>Votre prochaine séance est à portée de clic</h1>
+  <p>Trouvez une salle, un coach ou un cours, puis réservez en quelques secondes.</p>
+  <div class="hero-actions">
+    <a class="bouton-lien" routerLink="/seances">Réserver une séance</a>
+    <a class="bouton-lien discret" routerLink="/cours">Voir les cours</a>
+  </div>
+</section>
+
+<section>
+  <div class="titre-section"><h2>Nos cours</h2><a routerLink="/cours">Voir tout</a></div>
+  <div class="rangee">
+    @for (c of cours(); track c.id) {
+      <div class="carte">
+        <h3>{{ c.nom }}</h3>
+        <p>Niveau {{ c.niveau }}</p>
+      </div>
+    }
+  </div>
+</section>
+
+<section>
+  <div class="titre-section"><h2>Nos coachs</h2><a routerLink="/coachs">Voir tout</a></div>
+  <div class="rangee">
+    @for (c of coachs(); track c.id) {
+      <div class="carte centre">
+        <div class="rond"><app-photo dossier="users" [nom]="c.imageName" /></div>
+        <h3>{{ c.prenom }} {{ c.nom }}</h3>
+        <p>{{ c.specialite }}</p>
+        <a routerLink="/coachs/{{ c.id }}">Voir détail</a>
+      </div>
+    }
+  </div>
+</section>
+
+<section>
+  <div class="titre-section"><h2>Salles disponibles</h2><a routerLink="/salles">Voir tout</a></div>
+  <div class="rangee">
+    @for (s of salles(); track s.id) {
+      <div class="carte">
+        <app-photo dossier="salles" [nom]="s.imageName" />
+        <h3>{{ s.nom }}</h3>
+        <p>{{ s.ville }}</p>
+        <a routerLink="/salles/{{ s.id }}">Voir détail</a>
+      </div>
+    }
+  </div>
+</section>

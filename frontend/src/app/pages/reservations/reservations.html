@@ -1,0 +1,27 @@
+<h1>Mes réservations</h1>
+
+@if (message()) {
+  <p class="succes">{{ message() }}</p>
+}
+@if (erreur()) {
+  <p class="erreur">{{ erreur() }}</p>
+}
+
+<div class="liste">
+  @for (r of reservations(); track r.id) {
+    <div class="carte">
+      <h2>{{ r.cours }}</h2>
+      <p>Séance du {{ r.dateSeance }}</p>
+      <p>Statut : {{ r.statut }}</p>
+      <p>Réservée le {{ r.creeLe }}</p>
+
+      @if (r.statut === 'confirmee') {
+        <button type="button" (click)="annuler(r.id)">Annuler</button>
+      } @else if (r.dateAnnulation) {
+        <p>Annulée le {{ r.dateAnnulation }}</p>
+      }
+    </div>
+  } @empty {
+    <p>Vous n'avez aucune réservation.</p>
+  }
+</div>

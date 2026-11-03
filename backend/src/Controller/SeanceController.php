@@ -30,6 +30,7 @@ class SeanceController extends AbstractController
             'prix' => $s->getPrix(),
             'statut' => $s->getStatut(),
             'coachId' => $s->getCoach()?->getId(),
+            'coachNom' => trim(($s->getCoach()?->getUser()?->getPrenom() ?? '') . ' ' . ($s->getCoach()?->getUser()?->getNom() ?? '')),
             'coursId' => $s->getCours()?->getId(),
             'coursNom' => $s->getCours()?->getNom(),
             'salleId' => $s->getSalle()?->getId(),

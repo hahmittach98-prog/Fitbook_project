@@ -1,0 +1,27 @@
+<h1>Nos cours</h1>
+<form class="recherche" (ngSubmit)="chercher()">
+  <input type="search" name="q" [(ngModel)]="q" placeholder="Rechercher un cours">
+  <input type="text" name="niveau" [(ngModel)]="niveau" placeholder="Niveau (ex. debutant)">
+  <button type="submit">Rechercher</button>
+  <button type="button" (click)="reinitialiser()">Réinitialiser</button>
+</form>
+
+@if (erreur()) {
+  <p class="erreur">{{ erreur() }}</p>
+}
+
+<div class="liste petites">
+  @for (c of cours(); track c.id) {
+    <div class="carte">
+      <h2>{{ c.nom }}</h2>
+      <app-etoile [type]="'cours'" [id]="c.id" />
+      <p>Niveau : {{ c.niveau }}</p>
+      <details>
+        <summary>Voir plus</summary>
+        <p>{{ c.description }}</p>
+      </details>
+    </div>
+  } @empty {
+    <p>Aucun cours pour le moment.</p>
+  }
+</div>

@@ -1,0 +1,6 @@
+@if (api.connecte() && !api.aRole('ROLE_COACH', 'ROLE_SALLE', 'ROLE_ADMIN')) {
+  <button type="button" class="etoile" [class.active]="actif()" (click)="clic()"
+          [attr.aria-label]="actif() ? 'Retirer des favoris' : 'Ajouter aux favoris'">
+    {{ actif() ? '★' : '☆' }}
+  </button>
+}
