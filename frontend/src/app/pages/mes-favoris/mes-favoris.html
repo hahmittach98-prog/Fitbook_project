@@ -1,40 +1,48 @@
 <h1>Mes favoris</h1>
 
 <h2>Salles</h2>
-<div class="liste petites">
-  @for (s of favoris.liste().salles; track s.id) {
-    <div class="carte">
-      <h3><a [routerLink]="['/salles', s.id]">{{ s.nom }}</a></h3>
-      @if (s.ville) {
-        <p>{{ s.ville }}</p>
-      }
-      <app-etoile [type]="'salles'" [id]="s.id" />
-    </div>
-  } @empty {
-    <p>Aucune salle en favori.</p>
-  }
-</div>
+<table class="favoris">
+  <thead><tr><th>Salle</th><th>Ville</th><th>Favori</th></tr></thead>
+  <tbody>
+    @for (s of favoris.liste().salles; track s.id) {
+      <tr>
+        <td><a [routerLink]="['/salles', s.id]">{{ s.nom }}</a></td>
+        <td>{{ s.ville }}</td>
+        <td><app-etoile [type]="'salles'" [id]="s.id" /></td>
+      </tr>
+    } @empty {
+      <tr><td colspan="3">Aucune salle en favori.</td></tr>
+    }
+  </tbody>
+</table>
 
 <h2>Coachs</h2>
-<div class="liste petites">
-  @for (c of favoris.liste().coachs; track c.id) {
-    <div class="carte">
-      <h3><a [routerLink]="['/coachs', c.id]">{{ c.specialite }}</a></h3>
-      <app-etoile [type]="'coachs'" [id]="c.id" />
-    </div>
-  } @empty {
-    <p>Aucun coach en favori.</p>
-  }
-</div>
+<table class="favoris">
+  <thead><tr><th>Coach</th><th>Spécialité</th><th>Favori</th></tr></thead>
+  <tbody>
+    @for (c of favoris.liste().coachs; track c.id) {
+      <tr>
+        <td><a [routerLink]="['/coachs', c.id]">{{ c.prenom }} {{ c.nom }}</a></td>
+        <td>{{ c.specialite }}</td>
+        <td><app-etoile [type]="'coachs'" [id]="c.id" /></td>
+      </tr>
+    } @empty {
+      <tr><td colspan="3">Aucun coach en favori.</td></tr>
+    }
+  </tbody>
+</table>
 
 <h2>Cours</h2>
-<div class="liste petites">
-  @for (c of favoris.liste().cours; track c.id) {
-    <div class="carte">
-      <h3>{{ c.nom }}</h3>
-      <app-etoile [type]="'cours'" [id]="c.id" />
-    </div>
-  } @empty {
-    <p>Aucun cours en favori.</p>
-  }
-</div>
+<table class="favoris">
+  <thead><tr><th>Cours</th><th>Favori</th></tr></thead>
+  <tbody>
+    @for (c of favoris.liste().cours; track c.id) {
+      <tr>
+        <td>{{ c.nom }}</td>
+        <td><app-etoile [type]="'cours'" [id]="c.id" /></td>
+      </tr>
+    } @empty {
+      <tr><td colspan="2">Aucun cours en favori.</td></tr>
+    }
+  </tbody>
+</table>

@@ -27,7 +27,12 @@ class FavoriController extends AbstractController
                 $u->getFavorisSalles()->toArray()
             ),
             'coachs' => array_map(
-                fn ($c) => ['id' => $c->getId(), 'specialite' => $c->getSpecialite()],
+                fn ($c) => [
+                    'id' => $c->getId(),
+                    'prenom' => $c->getUser()?->getPrenom(),
+                    'nom' => $c->getUser()?->getNom(),
+                    'specialite' => $c->getSpecialite(),
+                ],
                 $u->getFavorisCoachs()->toArray()
             ),
             'cours' => array_map(
