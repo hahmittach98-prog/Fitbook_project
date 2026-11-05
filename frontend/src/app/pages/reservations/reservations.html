@@ -12,11 +12,13 @@
     <div class="carte">
       <h2>{{ r.cours }}</h2>
       <p>Séance du {{ r.dateSeance }}</p>
-      <p>Statut : {{ r.statut }}</p>
+      <p>Statut :
+        <strong class="statut" [class.confirmee]="r.statut === 'confirmee'" [class.annulee]="r.statut === 'annulee'">{{ r.statut === 'confirmee' ? 'Confirmée' : r.statut === 'annulee' ? 'Annulée' : r.statut }}</strong>
+      </p>
       <p>Réservée le {{ r.creeLe }}</p>
 
       @if (r.statut === 'confirmee') {
-        <button type="button" (click)="annuler(r.id)">Annuler</button>
+        <button type="button" class="danger" (click)="annuler(r.id)">Annuler</button>
       } @else if (r.dateAnnulation) {
         <p>Annulée le {{ r.dateAnnulation }}</p>
       }

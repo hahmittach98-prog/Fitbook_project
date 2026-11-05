@@ -43,6 +43,12 @@ export class Calendrier {
     return cases;
   });
 
+  // "vendredi 26 novembre 2026" au lieu de "2026-11-26"
+  titreJour = computed(() => {
+    const [a, m, j] = this.choisi().split('-').map(Number);
+    return new Date(a, m - 1, j).toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+  });
+
   seancesDuJour = computed(() => this.seances().filter((s) => s.date === this.choisi()));
 
   constructor() {
