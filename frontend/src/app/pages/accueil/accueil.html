@@ -1,26 +1,92 @@
-<section class="hero">
-  <h1>Votre prochaine séance est à portée de clic</h1>
-  <p>Trouvez une salle, un coach ou un cours, puis réservez en quelques secondes.</p>
-  <div class="hero-actions">
-    <a class="bouton-lien" routerLink="/seances">Réserver une séance</a>
-    <a class="bouton-lien discret" routerLink="/cours">Voir les cours</a>
+<section class="accueil-haut">
+  <div class="accueil-photo">
+    <img src="accueil.png" alt="Cours collectif de HIIT dans une salle de sport" />
+    <div class="accueil-texte">
+      <span class="etiquette">Réservation de séances sportives</span>
+      <h1>Quelle séance aujourd'hui ?</h1>
+      <div class="hero-actions">
+        <a class="bouton-lien" routerLink="/seances">Réserver une séance</a>
+        <a class="bouton-lien citron" routerLink="/cours">Voir les cours</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="roles">
+    <div class="role role-sportif">
+      <h3>Tu veux t'entraîner ?</h3>
+      <p>Trouve une séance près de chez toi et réserve en deux clics.</p>
+      <a routerLink="/seances">Réserver une séance →</a>
+    </div>
+    <div class="role role-coach">
+      <h3>Tu es coach ?</h3>
+      <p>Tu veux proposer tes cours et remplir tes séances ? C'est par ici.</p>
+      @if (api.aRole('ROLE_COACH')) {
+        <a routerLink="/espace-coach">Aller à mon espace coach →</a>
+      } @else {
+        <a routerLink="/inscription">Créer mon espace coach →</a>
+      }
+    </div>
+    <div class="role role-salle">
+      <h3>Tu gères une salle ?</h3>
+      <p>Présente ta salle, publie ton planning et reçois des réservations.</p>
+      @if (api.aRole('ROLE_SALLE')) {
+        <a routerLink="/espace-salle">Aller à mon espace salle →</a>
+      } @else {
+        <a routerLink="/inscription">Inscrire ma salle →</a>
+      }
+    </div>
   </div>
 </section>
 
+<form class="barre-filtre" (submit)="chercher($event)">
+  <input type="search" name="recherche" placeholder="Cours, coach ou salle" aria-label="Cours, coach ou salle" [ngModel]="recherche()" (ngModelChange)="recherche.set($event)" />
+  <input type="date" name="date" aria-label="Date" [ngModel]="date()" (ngModelChange)="date.set($event)" />
+  <input type="search" name="ville" placeholder="Ville" aria-label="Ville" [ngModel]="ville()" (ngModelChange)="ville.set($event)" />
+  <button type="submit" class="contour">Rechercher</button>
+</form>
+
+@if (resultats(); as r) {
+  <section id="resultats">
+    <div class="titre-section"><h2>Résultats</h2><a routerLink="/seances">Toutes les séances</a></div>
+    <div class="prochaines">
+      @for (s of r; track s.id) {
+        <div class="seance-ligne">
+          <span class="heure">{{ s.heureDebut?.slice(0, 5) }}</span>
+          <div>
+            <strong>{{ s.coursNom }}</strong>
+            <small>{{ s.salleNom }}{{ s.salleVille ? ' (' + s.salleVille + ')' : '' }} · {{ s.coachNom }} · {{ s.date }}</small>
+          </div>
+          <span class="prix-pastille">{{ s.prix }} € · {{ s.capaciteMax }} places</span>
+        </div>
+      } @empty {
+        <p>Aucune séance ne correspond à ta recherche.</p>
+      }
+    </div>
+  </section>
+}
+
 <section>
-  <div class="titre-section"><h2>Nos cours</h2><a routerLink="/cours">Voir tout</a></div>
+  <div class="titre-section">
+    <div><h2>Voici nos salles</h2><p class="intro">Des salles partenaires prêtes à t'accueillir.</p></div>
+    <a routerLink="/salles">Voir toutes les salles</a>
+  </div>
   <div class="rangee">
-    @for (c of cours(); track c.id) {
+    @for (s of salles(); track s.id) {
       <div class="carte">
-        <h3>{{ c.nom }}</h3>
-        <p>Niveau {{ c.niveau }}</p>
+        <app-photo dossier="salles" [nom]="s.imageName" />
+        <h3>{{ s.nom }}</h3>
+        <p>{{ s.ville }}</p>
+        <a routerLink="/salles/{{ s.id }}">Voir détail</a>
       </div>
     }
   </div>
 </section>
 
 <section>
-  <div class="titre-section"><h2>Nos coachs</h2><a routerLink="/coachs">Voir tout</a></div>
+  <div class="titre-section">
+    <div><h2>Ils te font transpirer</h2><p class="intro">Nos coachs, leurs spécialités et leurs séances.</p></div>
+    <a routerLink="/coachs">Voir tous les coachs</a>
+  </div>
   <div class="rangee">
     @for (c of coachs(); track c.id) {
       <div class="carte centre">
@@ -34,15 +100,26 @@
 </section>
 
 <section>
-  <div class="titre-section"><h2>Salles disponibles</h2><a routerLink="/salles">Voir tout</a></div>
+  <div class="titre-section">
+    <div><h2>Choisis ton cours</h2><p class="intro">Du plus doux au plus intense, pour tous les niveaux.</p></div>
+    <a routerLink="/cours">Voir tous les cours</a>
+  </div>
   <div class="rangee">
-    @for (s of salles(); track s.id) {
+    @for (c of cours(); track c.id) {
       <div class="carte">
-        <app-photo dossier="salles" [nom]="s.imageName" />
-        <h3>{{ s.nom }}</h3>
-        <p>{{ s.ville }}</p>
-        <a routerLink="/salles/{{ s.id }}">Voir détail</a>
+        <h3>{{ c.nom }}</h3>
+        <p>Niveau {{ c.niveau }}</p>
       </div>
     }
   </div>
 </section>
+
+@if (!api.connecte()) {
+  <section class="appel">
+    <div>
+      <h2>Prêt à bouger ?</h2>
+      <p>Crée ton compte gratuitement et réserve ta première séance.</p>
+    </div>
+    <a class="bouton-lien citron" routerLink="/inscription">Créer un compte</a>
+  </section>
+}

@@ -35,6 +35,7 @@ class SeanceController extends AbstractController
             'coursNom' => $s->getCours()?->getNom(),
             'salleId' => $s->getSalle()?->getId(),
             'salleNom' => $s->getSalle()?->getNom(),
+            'salleVille' => $s->getSalle()?->getVille(),
             'modifieLe' => $s->getUpdatedAt()?->format('Y-m-d H:i'),
 
         ];
