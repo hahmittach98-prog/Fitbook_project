@@ -19,6 +19,9 @@ export class EspaceSalle {
   reservations = signal<any[]>([]);
   voir = signal(0);
   edition = signal(0);
+  onglet = signal<'salles' | 'seances' | 'dispos'>('salles');   // la partie affichée
+  formSalleOuvert = signal(false);                              // le formulaire d'ajout ou de modification d'une salle
+  formSeanceOuvert = signal(false);                             // le formulaire de création d'une séance
   erreur = signal('');
   message = signal('');
   cours = signal<any[]>([]);
@@ -81,8 +84,14 @@ export class EspaceSalle {
     });
   }
 
+  ouvrirFormSalle() {
+    this.annuler();
+    this.formSalleOuvert.set(true);
+  }
+
   modifier(s: any) {
     this.edition.set(s.id);
+    this.formSalleOuvert.set(true);
     this.form = {
       nom: s.nom,
       ville: s.ville,
@@ -99,6 +108,7 @@ export class EspaceSalle {
 
   annuler() {
     this.edition.set(0);
+    this.formSalleOuvert.set(false);
     this.form = { nom: '', ville: '', adresse: '', capacite: '', telephone: '', description: '' };
     this.coursChoisis.set([]);
     this.coursAvant = [];
@@ -145,6 +155,7 @@ export class EspaceSalle {
     }).subscribe({
       next: () => {
         this.message.set('Séance créée.');
+        this.formSeanceOuvert.set(false);
         this.charger();
       },
       error: (e) => this.erreur.set(e.error?.erreur ?? 'Données invalides, vérifiez le formulaire.')

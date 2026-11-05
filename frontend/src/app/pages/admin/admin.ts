@@ -17,6 +17,8 @@ export class Admin {
   avis = signal<any[]>([]);
   cours = signal<any[]>([]);
   formCours = { nom: '', description: '', niveau: '' };
+  onglet = signal<'utilisateurs' | 'avis' | 'cours'>('utilisateurs');   // la partie affichée
+  formOuvert = signal(false);                                          // le formulaire d'ajout d'un cours
 
   constructor() {
     this.charger();
@@ -85,6 +87,7 @@ export class Admin {
       next: () => {
         this.message.set('Cours créé.');
         this.formCours = { nom: '', description: '', niveau: '' };
+        this.formOuvert.set(false);
         this.chargerCours();
       },
       error: (e) => this.erreur.set(e.error?.erreur ?? 'Création du cours impossible.')
