@@ -1,16 +1,18 @@
-
-
-
 /* ---------- 1. Couleurs et polices ----------
    Je les mets ici pour pouvoir les changer à un seul endroit. */
 :root {
-  --fond: #1b1e24;
-  --carte: #20242c;
-  --trait: #2f3540;
-  --texte: #e7e9ee;
-  --texte-doux: #a3a9b5;
-  --laiton: #c2a36b;          /* la couleur d'accent (doré mat) */
-  --laiton-clair: #d3b77f;    /* le même doré, au survol */
+  --fond: #f4f6f3;            /* blanc cassé légèrement vert */
+  --carte: #ffffff;           /* cartes et panneaux */
+  --trait: #d3dccf;           /* les fines lignes */
+  --texte: #12261d;           /* vert très foncé (presque noir) */
+  --texte-doux: #5b6c62;      /* gris-vert pour les textes secondaires */
+  --accent: #1d6b4a;          /* le vert FitBook */
+  --accent-clair: #16553a;    /* le même, plus foncé, au survol */
+  --survol: #e6ece2;          /* fond d'une ligne ou d'un lien survolé */
+  --fond-nav: #ffffff;        /* le menu du haut */
+  --champ: #ffffff;           /* fond des champs de formulaire */
+  --sur-accent: #ffffff;      /* texte posé sur un fond vert */
+  --citron: #c9f27a;          /* petite touche vive : étiquettes, pastilles */
   --police-titre: 'Barlow Condensed', 'Arial Narrow', system-ui, sans-serif;
   --police-texte: 'Barlow', system-ui, sans-serif;
 }
@@ -27,7 +29,7 @@ body {
   line-height: 1.45;
   background: var(--fond);
   color: var(--texte);
-  color-scheme: dark;         /* formulaires et barres de défilement sombres */
+  color-scheme: light;
 }
 
 h1, h2, h3 {
@@ -36,18 +38,18 @@ h1, h2, h3 {
   line-height: 1.1;
   margin: 0 0 8px;
 }
-h1 { font-size: 2rem; margin-bottom: 14px; }
+h1 { font-size: 2.2rem; margin-bottom: 18px; text-transform: uppercase; letter-spacing: 0.02em; }
 h2 { font-size: 1.4rem; margin-top: 22px; }
 h3 { font-size: 1.2rem; }
 
-a { color: var(--laiton); text-underline-offset: 3px; }
+a { color: var(--accent); text-underline-offset: 3px; }
 
 /* le contour qu'on voit quand on navigue au clavier */
-:focus-visible { outline: 2px solid var(--laiton); outline-offset: 2px; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
 /* le contenu des pages est centré et pas trop large */
 app-root { display: flex; flex-direction: column; min-height: 100vh; }
-main { flex: 1; width: 100%; max-width: 1180px; margin: 0 auto; padding: 18px 16px; }
+main { flex: 1; width: 100%; max-width: 1180px; margin: 0 auto; padding: 28px 20px; }
 
 
 footer {
@@ -70,17 +72,17 @@ footer .logo {
   font-family: var(--police-titre);
   font-weight: 800;
   font-size: 1.5rem;
-  color: var(--laiton);
+  color: var(--texte);
   text-decoration: none;
 }
 .footer-liens { display: flex; flex-wrap: wrap; gap: 6px 20px; }
 .footer-liens a { color: var(--texte-doux); text-decoration: none; }
-.footer-liens a:hover { color: var(--laiton-clair); }
+.footer-liens a:hover { color: var(--texte); }
 
 /* les icônes des réseaux sociaux : juste le dessin, doré au survol */
 .reseaux { display: flex; gap: 14px; }
 .reseaux a { color: var(--texte-doux); display: flex; }
-.reseaux a:hover { color: var(--laiton-clair); }
+.reseaux a:hover { color: var(--accent-clair); }
 .reseaux svg {
   width: 20px;
   height: 20px;
@@ -106,7 +108,7 @@ nav {
   align-items: center;
   gap: 4px 16px;
   padding: 10px 20px;
-  background: #191c22;
+  background: var(--fond-nav);
   border-bottom: 1px solid var(--trait);
 }
 nav a {
@@ -115,13 +117,13 @@ nav a {
   padding: 4px 0;
   border-bottom: 2px solid transparent;
 }
-nav a:hover { color: var(--texte); border-bottom-color: var(--laiton); }
+nav a:hover { color: var(--texte); border-bottom-color: var(--accent); }
 
 nav .logo {
   font-family: var(--police-titre);
   font-weight: 800;
   font-size: 1.6rem;
-  color: var(--laiton);
+  color: var(--texte);
   margin-right: 10px;
   border-bottom: none;
 }
@@ -162,21 +164,21 @@ nav .logo {
   z-index: 20;
 }
 .menu-liste a { padding: 7px 10px; border-radius: 4px; border-bottom: none; }
-.menu-liste a:hover { background: #2a2f39; }
+.menu-liste a:hover { background: var(--survol); }
 
 /* un lien qui a l'allure d'un bouton (ex : Inscription, Réserver une séance) */
 .bouton-lien {
   display: inline-block;
-  background: var(--laiton);
-  color: #1a1d22;
+  background: var(--accent);
+  color: var(--sur-accent);
   font-weight: 600;
   padding: 6px 14px;
   border-radius: 6px;
   text-decoration: none;
 }
-nav a.bouton-lien { color: #1a1d22; border-bottom: none; padding: 6px 14px; }
+nav a.bouton-lien { color: var(--sur-accent); border-bottom: none; padding: 6px 14px; }
 .bouton-lien:hover,
-nav a.bouton-lien:hover { background: var(--laiton-clair); color: #1a1d22; }
+nav a.bouton-lien:hover { background: var(--accent-clair); color: var(--sur-accent); }
 
 /* version "discrète" : juste un contour */
 .bouton-lien.discret,
@@ -185,7 +187,7 @@ nav a.bouton-lien.discret {
   color: var(--texte);
   border: 1px solid var(--texte-doux);
 }
-.bouton-lien.discret:hover { background: #2a2f39; color: var(--texte); }
+.bouton-lien.discret:hover { background: var(--survol); color: var(--texte); }
 
 
 /* ---------- 4. Boutons et formulaires ---------- */
@@ -193,14 +195,31 @@ nav a.bouton-lien.discret {
 button {
   font: inherit;
   font-weight: 600;
-  background: var(--laiton);
-  color: #1a1d22;
+  background: var(--accent);
+  color: var(--sur-accent);
   border: none;
   border-radius: 6px;
   padding: 6px 14px;
   cursor: pointer;
 }
-button:hover { background: var(--laiton-clair); }
+button:hover { background: var(--accent-clair); }
+
+/* deux boutons côte à côte ne se touchent plus */
+button + button, button + .bouton-lien, .bouton-lien + button { margin-left: 8px; }
+.actions button + button, .hero-actions .bouton-lien + .bouton-lien { margin-left: 0; }   /* ces blocs ont déjà un espace (gap) */
+td button + button { margin-left: 8px; }
+.barre-filtre button + button { margin-left: 8px; }
+
+/* bouton d'action risquée (Annuler une réservation) : rouge et gras */
+button.danger { background: transparent; color: #b3261e; border: 1.5px solid #b3261e; font-weight: 800; }
+button.danger:hover { background: #fdecea; }
+
+/* statut d'une réservation */
+.statut { font-weight: 800; }
+.statut.confirmee { color: #1d6b4a; }
+.statut.annulee { color: #b3261e; }
+
+.champ-photo { border: 1px dashed var(--trait); border-radius: 10px; padding: 12px; margin-bottom: 14px; display: grid; gap: 8px; }
 
 /* les boutons dans les tableaux sont un peu plus petits */
 td button { padding: 4px 12px; font-size: 0.9rem; }
@@ -217,10 +236,10 @@ input, select, textarea {
   padding: 7px 10px;
   border: 1px solid var(--trait);
   border-radius: 6px;
-  background: #15181d;
+  background: var(--champ);
   color: var(--texte);
 }
-input:focus, select:focus, textarea:focus { outline: none; border-color: var(--laiton); }
+input:focus, select:focus, textarea:focus { outline: none; border-color: var(--accent); }
 form { max-width: 460px; }
 
 /* la barre de recherche des listes (salles, coachs, cours...) */
@@ -246,6 +265,28 @@ app-avis input[type="number"] {
   width: auto;
   min-width: 70px;
   padding: 4px 8px;
+}
+
+
+/* ---------- page "Nos salles" : filtres à gauche, une salle par ligne ---------- */
+.page-liste { display: grid; grid-template-columns: 230px 1fr; gap: 20px; align-items: start; }
+.filtres { display: flex; flex-direction: column; gap: 8px; max-width: none; background: var(--survol); border: 1px solid var(--trait); border-radius: 12px; padding: 14px; }
+.filtres h2 { margin: 0 0 4px; font-size: 1.3rem; }
+.filtres button + button { margin-left: 0; }
+.resultats { display: flex; flex-direction: column; gap: 10px; }
+.ligne-salle { display: flex; align-items: center; gap: 14px; background: var(--carte); border: 1px solid var(--trait); border-radius: 12px; padding: 10px 14px 10px 10px; }
+.ligne-salle .vignette { width: 130px; height: 80px; flex-shrink: 0; border-radius: 8px; overflow: hidden; background: var(--trait); }
+.ligne-salle .vignette .photo { width: 100%; height: 100%; object-fit: cover; border-radius: 0; }
+.ligne-salle .infos { flex: 1; min-width: 0; }
+.ligne-salle h2 { margin: 0; font-size: 1.3rem; }
+.ligne-salle p { margin: 2px 0 0; color: var(--texte-doux); }
+.capacite { background: var(--citron); color: var(--texte); border-radius: 99px; padding: 3px 12px; font-size: 0.85rem; font-weight: 600; white-space: nowrap; }
+.ligne-salle .bouton-lien { padding: 6px 14px; }
+.ligne-salle app-etoile { position: static; }
+@media (max-width: 800px) {
+  .page-liste { grid-template-columns: 1fr; }
+  .ligne-salle { flex-wrap: wrap; }
+  .ligne-salle .infos { flex-basis: calc(100% - 160px); }
 }
 
 
@@ -284,7 +325,7 @@ app-reservations > .carte, app-mes-favoris > .carte, app-espace-coach > .carte {
   border-radius: 10px;
   padding: 12px 14px;
 }
-.carte:hover { border-color: var(--laiton); }
+.carte:hover { border-color: var(--accent); }
 .carte h2 { margin: 0 0 6px; font-size: 1.35rem; padding-right: 30px; }
 .carte h3 { padding-right: 28px; }
 .carte p { margin: 0 0 6px; color: var(--texte-doux); }
@@ -304,7 +345,7 @@ app-reservations > .carte, app-mes-favoris > .carte, app-espace-coach > .carte {
 
 /* texte des coachs */
 .specialite {
-  color: var(--laiton);
+  color: var(--accent);
   font-family: var(--police-titre);
   font-size: 1.15rem;
   letter-spacing: 0.02em;
@@ -320,21 +361,22 @@ app-reservations > .carte, app-mes-favoris > .carte, app-espace-coach > .carte {
 }
 
 /* "Voir plus" qui déroule le texte */
-details summary { cursor: pointer; color: var(--laiton); font-weight: 600; }
+details summary { cursor: pointer; color: var(--accent); font-weight: 600; }
 details p { margin-top: 6px; }
 
 /* l'étoile des favoris : dans le coin en haut à droite, sans fond */
 app-etoile { position: absolute; top: 10px; right: 12px; }
+td app-etoile { position: static; }     /* dans un tableau, l'étoile reste dans sa case */
 app-etoile button {
   background: none;
   border: none;
   padding: 0;
   font-size: 1.5rem;
   line-height: 1;
-  color: var(--laiton);
+  color: var(--accent);
   cursor: pointer;
 }
-app-etoile button:hover { background: none; color: var(--laiton-clair); }
+app-etoile button:hover { background: none; color: var(--accent-clair); }
 app-mes-favoris .liste { align-items: stretch; }
 
 /* ---------- 6. Photos ---------- */
@@ -360,13 +402,13 @@ app-mes-favoris .liste { align-items: stretch; }
   margin: 0;
   padding: 4px 12px;
   font-size: 0.9rem;
-  border: 1px solid var(--laiton);
+  border: 1px solid var(--accent);
   border-radius: 6px;
-  color: var(--laiton);
+  color: var(--accent);
   font-weight: 600;
   cursor: pointer;
 }
-.telechargement .choisir:hover { background: #29271f; }
+.telechargement .choisir:hover { background: var(--survol); }
 .nom-fichier {
   font-size: 0.85rem;
   color: var(--texte-doux);
@@ -379,26 +421,75 @@ app-mes-favoris .liste { align-items: stretch; }
 
 /* ---------- 7. Page d'accueil ---------- */
 
-/* grande bannière : l'image est assombrie à gauche pour que le texte reste lisible */
-.hero {
-  min-height: 400px;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  padding: 40px 32px;
-  margin-bottom: 8px;
-  border-radius: 12px;
-  background:
-    linear-gradient(90deg, rgba(20, 22, 27, 0.88) 0%, rgba(20, 22, 27, 0.5) 55%, rgba(20, 22, 27, 0.15) 100%),
-    url('/accueil.jpg') center / cover no-repeat,
-    radial-gradient(circle at 80% 20%, #3a3426 0%, #20242c 60%);   /* si l'image manque */
+/* logo : "Fit" dans un cadre vert, "book" à côté */
+.logo b {
+  background: var(--accent);
+  color: var(--sur-accent);
+  padding: 0 7px 1px;
+  border-radius: 6px;
+  margin-right: 4px;
 }
-.hero h1 { font-size: clamp(2.2rem, 6vw, 3.6rem); max-width: 14ch; }
-.hero p { max-width: 46ch; color: var(--texte); font-size: 1.1rem; margin: 0 0 18px; }
+
+/* haut de l'accueil : la photo avec le titre à gauche, les trois cartes à droite */
+.accueil-haut { display: grid; grid-template-columns: 1.25fr 1fr; gap: 16px; padding-top: 8px; }
+.accueil-photo { position: relative; border-radius: 20px; overflow: hidden; min-height: 440px; background: var(--texte); }
+.accueil-photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 40% center; }
+.accueil-photo::after { content: ''; position: absolute; inset: 0; background: linear-gradient(0deg, rgba(10, 40, 28, 0.92), rgba(10, 40, 28, 0.05) 70%); }
+.accueil-texte { position: absolute; z-index: 2; left: 28px; right: 28px; bottom: 26px; color: #fff; }
+.accueil-texte h1 { color: #fff; font-size: clamp(2rem, 4vw, 3.4rem); margin: 10px 0 16px; }
+.etiquette { display: inline-block; background: var(--citron); color: var(--texte); border-radius: 99px; padding: 4px 14px; font-size: 0.85rem; font-weight: 600; }
 .hero-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+.bouton-lien.citron { background: var(--citron); color: var(--texte); }
+.bouton-lien.citron:hover { background: #fff; color: var(--texte); }
+
+.roles { display: grid; grid-template-rows: repeat(3, 1fr); gap: 14px; }
+.role { border-radius: 20px; padding: 20px 24px; display: flex; flex-direction: column; justify-content: center; gap: 4px; }
+.role h3 { margin: 0; font-size: 1.6rem; text-transform: uppercase; }
+.role p { margin: 0 0 8px; }
+.role a { font-weight: 700; text-decoration: none; color: inherit; }
+.role a:hover { text-decoration: underline; }
+.role-sportif { background: var(--citron); color: var(--texte); }
+.role-coach { background: var(--accent); color: #fff; }
+.role-coach h3, .role-salle h3 { color: #fff; }
+.role-salle { background: var(--texte); color: #fff; }
+
+/* barre de recherche sous l'en-tête (comme la maquette) : 3 champs puis le bouton à droite */
+.barre-filtre { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; background: var(--survol); border: 1px solid var(--trait); border-radius: 12px; padding: 14px; margin: 18px 0 0; max-width: none; }
+.barre-filtre input { flex: 1 1 160px; margin: 0; }
+.barre-filtre button { margin-left: auto; }
+@media (max-width: 480px) { .barre-filtre button { width: 100%; } }
+
+.intro { margin: 4px 0 0; color: var(--texte-doux); }
+
+/* bandeau d'appel en bas (visible seulement si on n'est pas connecté) */
+.appel { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 16px; background: var(--texte); color: #fff; border-radius: 16px; padding: 28px 32px; margin: 40px 0 8px; }
+.appel h2 { margin: 0 0 4px; color: #fff; }
+.appel p { margin: 0; opacity: 0.8; }
+
+@media (max-width: 800px) {
+  .accueil-haut { grid-template-columns: 1fr; }
+  .accueil-photo { min-height: 340px; }
+}
+
+.prochaines { display: grid; gap: 10px; }
+.seance-ligne {
+  display: grid;
+  grid-template-columns: 70px 1fr auto;
+  gap: 14px;
+  align-items: center;
+  background: var(--carte);
+  border: 1px solid var(--trait);
+  border-radius: 10px;
+  padding: 12px 16px;
+}
+.seance-ligne .heure { font-family: var(--police-titre); font-weight: 800; font-size: 1.5rem; color: var(--accent); }
+.seance-ligne strong { display: block; }
+.seance-ligne small { color: var(--texte-doux); }
+.prix-pastille { background: var(--citron); color: var(--texte); border-radius: 99px; padding: 3px 12px; font-size: 0.85rem; font-weight: 600; white-space: nowrap; }
+@media (max-width: 480px) { .seance-ligne { grid-template-columns: 56px 1fr; } .seance-ligne .prix-pastille { grid-column: 2; justify-self: start; } }
 
 /* titre d'une section ("Nos cours") avec "Voir tout" à droite */
-.titre-section { display: flex; justify-content: space-between; align-items: center; margin-top: 24px; }
+.titre-section { display: flex; justify-content: space-between; align-items: center; margin: 28px 0 14px; }
 .titre-section h2 { margin: 0; }
 .rangee { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 16px; }
 
@@ -411,7 +502,7 @@ app-mes-favoris .liste { align-items: stretch; }
 .fiche-texte h1 { margin-bottom: 4px; padding-right: 36px; }
 .fiche-texte h2 { margin-top: 18px; font-size: 1.2rem; }
 .fiche .description { max-width: 62ch; line-height: 1.65; color: var(--texte); margin: 10px 0; }
-.fiche .prix { font-family: var(--police-titre); font-size: 1.4rem; color: var(--laiton); }
+.fiche .prix { font-family: var(--police-titre); font-size: 1.4rem; color: var(--accent); }
 .fiche-photo { flex: 0 0 280px; align-self: center; }
 .fiche-photo .photo { height: auto; max-height: 320px; object-fit: contain; background: transparent; }
 .fiche-photo .photo.vide { height: 230px; background: var(--trait); }   /* le cadre gris quand il n'y a pas de photo */
@@ -458,22 +549,43 @@ app-profil h1 { text-align: center; }
 
 /* ---------- 10. Espaces coach, salle et admin ---------- */
 
-/* formulaire à gauche, tableau à droite */
-.deux-colonnes {
-  display: grid;
-  grid-template-columns: minmax(260px, 340px) 1fr;
-  gap: 20px;
-  align-items: start;
-  margin-bottom: 8px;
+/* les onglets : on n'affiche qu'une partie à la fois */
+.onglets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin: 4px 0 24px;
+  border-bottom: 1px solid var(--trait);
 }
+.onglets button {
+  background: none;
+  color: var(--texte-doux);
+  border-radius: 0;
+  border-bottom: 2px solid transparent;
+  padding: 8px 16px;
+  font-size: 1rem;
+}
+.onglets button:hover { background: none; color: var(--texte); }
+.onglets button.actif { color: var(--texte); border-bottom-color: var(--accent); }
+
+/* une ligne avec le titre à gauche et le bouton "+ Ajouter" à droite */
+.barre-titre { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin: 0 0 16px; }
+.barre-titre h2 { margin: 0; }
+
+/* un bouton avec juste un contour (Annuler, Supprimer) */
+button.contour { background: transparent; color: var(--texte); border: 1px solid var(--texte-doux); }
+button.contour:hover { background: var(--survol); }
+
 .panneau {
   background: var(--carte);
   border: 1px solid var(--trait);
   border-radius: 10px;
-  padding: 14px;
+  padding: 20px;
+  margin-bottom: 24px;
   overflow-x: auto;           /* le tableau défile si l'écran est trop petit */
 }
 .panneau h2 { margin-top: 0; }
+.panneau form { max-width: none; margin-bottom: 28px; }
 .espace-haut { margin-top: 20px; }
 
 /* les boutons d'un tableau (Modifier, Photo, Réservations...) avec un espace entre eux */
@@ -487,9 +599,9 @@ app-profil h1 { text-align: center; }
   cursor: pointer;
   padding: 4px 12px;
   font-size: 0.9rem;
-  border: 1px solid var(--laiton);
+  border: 1px solid var(--accent);
   border-radius: 6px;
-  color: var(--laiton);
+  color: var(--accent);
   font-weight: 600;
   list-style: none;
 }
@@ -509,7 +621,7 @@ app-profil h1 { text-align: center; }
 /* les noms des sportifs qui ont réservé */
 .pastille {
   display: inline-block;
-  background: #2a2f39;
+  background: var(--survol);
   border-radius: 999px;
   padding: 2px 10px;
   margin: 2px 4px 2px 0;
@@ -524,14 +636,19 @@ app-profil h1 { text-align: center; }
 
 /* ---------- 11. Tableaux ---------- */
 
-table { width: 100%; border-collapse: collapse; background: var(--carte); }
-th, td { padding: 8px 10px; text-align: left; border-bottom: 1px solid var(--trait); vertical-align: middle; }
+table { width: 100%; border-collapse: collapse; }
+table.favoris { table-layout: fixed; margin-bottom: 8px; }
+table.favoris th:last-child, table.favoris td:last-child { width: 90px; }
+th, td { padding: 12px 12px; text-align: left; border-bottom: 1px solid var(--trait); vertical-align: middle; }
 th {
-  background: #2a2f39;
+  color: var(--texte-doux);
   font-family: var(--police-titre);
   font-weight: 700;
-  font-size: 1.05rem;
+  font-size: 0.95rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
 }
+tbody tr:hover { background: var(--survol); }
 
 
 /* ---------- 12. Connexion et inscription ---------- */
@@ -542,24 +659,45 @@ app-connexion form, app-inscription form { margin: 0 auto; text-align: left; }
 
 /* ---------- 13. Calendrier ---------- */
 
+/* la page : petit calendrier à gauche, séances du jour à droite */
+.calendrier-page { display: grid; grid-template-columns: 340px 1fr; gap: 28px; align-items: start; }
+.calendrier-mois { background: var(--carte); border: 1px solid var(--trait); border-radius: 12px; padding: 16px; }
+.calendrier-jour h2 { margin-top: 0; }
+.calendrier-jour .carte { margin-bottom: 12px; }
+.calendrier-mois .navigation { justify-content: space-between; margin-bottom: 12px; }
+.calendrier-mois .navigation strong { text-transform: capitalize; }
+.calendrier-mois .entete { font-size: 0.8rem; color: var(--texte-doux); margin-bottom: 4px; }
+
+/* un jour : le chiffre au centre, un petit point en dessous s'il y a une séance */
 .jour {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  width: 100%;
+  min-height: 42px;
+  padding: 4px 0;
   background: var(--carte);
   color: var(--texte);
   border: 1px solid var(--trait);
   border-radius: 6px;
   font-weight: 500;
 }
-.jour small { color: var(--texte-doux); font-weight: 400; }
-.jour:hover { background: #2a2f39; }
-.jour.avec, .jour.avec:hover { border-color: var(--laiton); background: #29271f; }   /* jour avec une séance */
-.jour.choisi, .jour.choisi:hover { background: var(--laiton); color: #1a1d22; }      /* jour sélectionné */
-.jour.choisi small { color: #1a1d22; }
+.jour .point, .legende .point { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
+.jour:not(.avec) .num { margin-bottom: 9px; }   /* garde le chiffre à la même hauteur, avec ou sans point */
+.legende { margin: 12px 0 0; font-size: 0.85rem; color: var(--texte-doux); display: flex; align-items: center; gap: 6px; }
+.jour:hover { background: var(--survol); }
+.jour.avec, .jour.avec:hover { border-color: var(--accent); background: var(--survol); }   /* jour avec une séance */
+.jour.choisi, .jour.choisi:hover { background: var(--accent); color: var(--sur-accent); }      /* jour sélectionné */
+.jour.choisi .point { background: var(--citron); }
+@media (max-width: 800px) { .calendrier-page { grid-template-columns: 1fr; } }
 
 
 /* ---------- 14. Messages (succès et erreur) ---------- */
 
-.succes { background: #1f2d25; border-left: 4px solid #5aa377; color: #bfe3cc; padding: 6px 10px; }
-.erreur { background: #33201f; border-left: 4px solid #c0605a; color: #f0c3c0; padding: 6px 10px; }
+.succes { background: var(--carte); border-left: 4px solid #1d6b4a; color: var(--texte); padding: 8px 12px; margin: 0 0 16px; }
+.erreur { background: var(--carte); border-left: 4px solid #c0605a; color: var(--texte); padding: 8px 12px; margin: 0 0 16px; }
 
 
 /* ---------- 15. Responsive (tablette et mobile) ---------- */
@@ -594,7 +732,6 @@ app-connexion form, app-inscription form { margin: 0 auto; text-align: left; }
   .profil-photo { flex: none; }
 
   /* bannière de l'accueil plus petite */
-  .hero { min-height: 320px; padding: 28px 18px; }
 }
 
 @media (max-width: 700px) {
@@ -613,6 +750,8 @@ app-connexion form, app-inscription form { margin: 0 auto; text-align: left; }
 }
 
 @media (max-width: 480px) {
+  .onglets button { padding: 8px 10px; font-size: 0.9rem; }
+  .barre-titre { flex-wrap: wrap; }
   .horizontale app-photo { flex-basis: 110px; }
   .form-grille { grid-template-columns: 1fr; }     /* formulaire sur une seule colonne */
 }
