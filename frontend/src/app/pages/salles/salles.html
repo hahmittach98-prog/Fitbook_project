@@ -1,29 +1,33 @@
 <h1>Nos salles</h1>
-<form class="recherche" (ngSubmit)="chercher()">
-  <input type="search" name="q" [(ngModel)]="q" placeholder="Rechercher une salle">
-  <input type="text" name="ville" [(ngModel)]="ville" placeholder="Ville">
-  <input type="number" name="capaciteMin" [(ngModel)]="capaciteMin" placeholder="Capacité minimale" min="0">
-  <button type="submit">Rechercher</button>
-  <button type="button" (click)="reinitialiser()">Réinitialiser</button>
-</form>
 
-@if (erreur()) {
-  <p class="erreur">{{ erreur() }}</p>
-}
+<div class="page-liste">
+  <form class="filtres" (ngSubmit)="chercher()">
+    <h2>Filtrer</h2>
+    <input type="search" name="q" [(ngModel)]="q" placeholder="Nom de la salle" aria-label="Nom de la salle">
+    <input type="text" name="ville" [(ngModel)]="ville" placeholder="Ville" aria-label="Ville">
+    <input type="number" name="capaciteMin" [(ngModel)]="capaciteMin" placeholder="Capacité minimale" aria-label="Capacité minimale" min="0">
+    <button type="submit">Rechercher</button>
+    <button type="button" class="contour" (click)="reinitialiser()">Réinitialiser</button>
+  </form>
 
-<div class="liste">
-  @for (s of salles(); track s.id) {
-    <div class="carte horizontale">
-      <app-photo dossier="salles" [nom]="s.imageName" />
-      <div class="texte">
-        <h2>{{ s.nom }}</h2>
+  <div class="resultats">
+    @if (erreur()) {
+      <p class="erreur">{{ erreur() }}</p>
+    }
+
+    @for (s of salles(); track s.id) {
+      <div class="ligne-salle">
+        <div class="vignette"><app-photo dossier="salles" [nom]="s.imageName" /></div>
+        <div class="infos">
+          <h2>{{ s.nom }}</h2>
+          <p>{{ s.adresse }}, {{ s.ville }}</p>
+        </div>
+        <span class="capacite">{{ s.capacite }} pers.</span>
+        <a class="bouton-lien" [routerLink]="['/salles', s.id]">Détail</a>
         <app-etoile [type]="'salles'" [id]="s.id" />
-        <p>{{ s.ville }}, {{ s.adresse }}</p>
-        <p>Capacité : {{ s.capacite }} personnes</p>
-        <a [routerLink]="['/salles', s.id]">Voir le détail</a>
       </div>
-    </div>
-  } @empty {
-    <p>Aucune salle pour le moment.</p>
-  }
+    } @empty {
+      <p>Aucune salle pour le moment.</p>
+    }
+  </div>
 </div>

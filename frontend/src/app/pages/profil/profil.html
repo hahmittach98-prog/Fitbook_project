@@ -11,7 +11,6 @@
   <div class="profil-carte">
     <div class="profil-photo">
       <app-photo dossier="users" [nom]="p.imageName" />
-      <app-telechargement type="profil" (envoye)="photoEnvoyee($event)" />
     </div>
 
     <div class="profil-infos">
@@ -23,6 +22,10 @@
         <button type="button" (click)="modifier()">Modifier mon profil</button>
       } @else {
         <form (ngSubmit)="enregistrer()">
+          <div class="champ-photo">
+            <strong>Changer de photo</strong>
+            <app-telechargement type="profil" (envoye)="photoEnvoyee($event)" />
+          </div>
           <label>Nom <input type="text" name="nom" [(ngModel)]="form.nom" required /></label>
           <label>Prénom <input type="text" name="prenom" [(ngModel)]="form.prenom" required /></label>
           <label>Téléphone <input type="text" name="telephone" [(ngModel)]="form.telephone" /></label>

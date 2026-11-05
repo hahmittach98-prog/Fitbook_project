@@ -20,6 +20,8 @@ export class EspaceCoach {
   salles = signal<any[]>([]);
   reservations = signal<any[]>([]);
   voir = signal(0);
+  onglet = signal<'seances' | 'dispos' | 'avis' | 'profil'>('seances');   // la partie affichée
+  formOuvert = signal(false);                                            // le formulaire de création d'une séance
   erreur = signal('');
   message = signal('');
   profilManquant = signal(false);
@@ -107,6 +109,7 @@ export class EspaceCoach {
     }).subscribe({
       next: () => {
         this.message.set('Séance créée.');
+        this.formOuvert.set(false);
         this.chargerSeances();
       },
       error: (e) => this.erreur.set(e.error?.erreur ?? 'Données invalides, vérifiez le formulaire.')
