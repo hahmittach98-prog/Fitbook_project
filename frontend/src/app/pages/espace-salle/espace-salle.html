@@ -7,34 +7,46 @@
   <p class="erreur">{{ erreur() }}</p>
 }
 
-<div class="deux-colonnes">
-  <div class="panneau">
-    <h2>{{ edition() ? 'Modifier ma salle' : 'Ajouter une salle' }}</h2>
-    <form (ngSubmit)="envoyer()">
-      <label>Nom <input type="text" name="nom" [(ngModel)]="form.nom" required /></label>
-      <label>Ville <input type="text" name="ville" [(ngModel)]="form.ville" required /></label>
-      <label>Adresse <input type="text" name="adresse" [(ngModel)]="form.adresse" required /></label>
-      <label>Capacité <input type="number" name="capacite" [(ngModel)]="form.capacite" min="1" required /></label>
-      <label>Téléphone <input type="text" name="telephone" [(ngModel)]="form.telephone" /></label>
-      <label>Description <textarea name="description" [(ngModel)]="form.description"></textarea></label>
-            <fieldset class="choix-cours">
-        <legend>Cours proposés</legend>
-        @for (c of cours(); track c.id) {
-          <label class="case">
-            <input type="checkbox" [checked]="coursChoisis().includes(c.id)" (change)="basculer(c.id)" />
-            {{ c.nom }}
-          </label>
-        }
-      </fieldset>
-      <button type="submit">{{ edition() ? 'Enregistrer' : 'Créer la salle' }}</button>
-      @if (edition()) {
-        <button type="button" (click)="annuler()">Annuler</button>
-      }
-    </form>
-  </div>
+<div class="onglets">
+  <button type="button" [class.actif]="onglet() === 'salles'" (click)="onglet.set('salles')">Mes salles</button>
+  <button type="button" [class.actif]="onglet() === 'seances'" (click)="onglet.set('seances')">Séances</button>
+  <button type="button" [class.actif]="onglet() === 'dispos'" (click)="onglet.set('dispos')">Disponibilités et avis</button>
+</div>
 
+@if (onglet() === 'salles') {
   <div class="panneau">
-    <h2>Mes salles</h2>
+    <div class="barre-titre">
+      <h2>Mes salles</h2>
+      @if (!formSalleOuvert()) {
+        <button type="button" (click)="ouvrirFormSalle()">+ Ajouter une salle</button>
+      }
+    </div>
+
+    @if (formSalleOuvert()) {
+      <form class="form-grille" (ngSubmit)="envoyer()">
+        <h3 class="large">{{ edition() ? 'Modifier ma salle' : 'Nouvelle salle' }}</h3>
+        <label>Nom <input type="text" name="nom" [(ngModel)]="form.nom" required /></label>
+        <label>Ville <input type="text" name="ville" [(ngModel)]="form.ville" required /></label>
+        <label>Adresse <input type="text" name="adresse" [(ngModel)]="form.adresse" required /></label>
+        <label>Capacité <input type="number" name="capacite" [(ngModel)]="form.capacite" min="1" required /></label>
+        <label>Téléphone <input type="text" name="telephone" [(ngModel)]="form.telephone" /></label>
+        <label class="large">Description <textarea name="description" [(ngModel)]="form.description"></textarea></label>
+        <fieldset class="choix-cours large">
+          <legend>Cours proposés</legend>
+          @for (c of cours(); track c.id) {
+            <label class="case">
+              <input type="checkbox" [checked]="coursChoisis().includes(c.id)" (change)="basculer(c.id)" />
+              {{ c.nom }}
+            </label>
+          }
+        </fieldset>
+        <div class="actions large">
+          <button type="submit">{{ edition() ? 'Enregistrer' : 'Créer la salle' }}</button>
+          <button type="button" class="contour" (click)="annuler()">Annuler</button>
+        </div>
+      </form>
+    }
+
     <table>
       <thead>
         <tr><th></th><th>Nom</th><th>Ville</th><th>Places</th><th>Actions</th></tr>
@@ -62,47 +74,55 @@
       </tbody>
     </table>
   </div>
-</div>
+}
 
-<div class="deux-colonnes">
+@if (onglet() === 'seances') {
   <div class="panneau">
-    <h2>Créer une séance</h2>
-    <form (ngSubmit)="creerSeance()">
-      <label>Salle
-        <select name="salleId" [(ngModel)]="formSeance.salleId" required>
-          <option value="">Choisir</option>
-          @for (s of salles(); track s.id) {
-            <option [value]="s.id">{{ s.nom }}</option>
-          }
-        </select>
-      </label>
-      <label>Coach
-        <select name="coachId" [(ngModel)]="formSeance.coachId" required>
-          <option value="">Choisir</option>
-          @for (c of coachs(); track c.id) {
-            <option [value]="c.id">{{ c.prenom }} {{ c.nom }} ({{ c.specialite }})</option>
-          }
-        </select>
-      </label>
-      <label>Cours
-        <select name="coursId" [(ngModel)]="formSeance.coursId" required>
-          <option value="">Choisir</option>
-          @for (c of cours(); track c.id) {
-            <option [value]="c.id">{{ c.nom }}</option>
-          }
-        </select>
-      </label>
-      <label>Date <input type="date" name="sDate" [(ngModel)]="formSeance.date" required /></label>
-      <label>Début <input type="time" name="sDebut" [(ngModel)]="formSeance.heureDebut" required /></label>
-      <label>Fin <input type="time" name="sFin" [(ngModel)]="formSeance.heureFin" required /></label>
-      <label>Places <input type="number" name="sPlaces" [(ngModel)]="formSeance.capaciteMax" min="1" required /></label>
-      <label>Prix (€) <input type="number" name="sPrix" [(ngModel)]="formSeance.prix" min="0" required /></label>
-      <button type="submit">Créer la séance</button>
-    </form>
-  </div>
+    <div class="barre-titre">
+      <h2>Séances dans mes salles</h2>
+      @if (!formSeanceOuvert()) {
+        <button type="button" (click)="formSeanceOuvert.set(true)">+ Créer une séance</button>
+      }
+    </div>
 
-  <div class="panneau">
-    <h2>Séances dans mes salles</h2>
+    @if (formSeanceOuvert()) {
+      <form class="form-grille" (ngSubmit)="creerSeance()">
+        <label>Salle
+          <select name="salleId" [(ngModel)]="formSeance.salleId" required>
+            <option value="">Choisir</option>
+            @for (s of salles(); track s.id) {
+              <option [value]="s.id">{{ s.nom }}</option>
+            }
+          </select>
+        </label>
+        <label>Coach
+          <select name="coachId" [(ngModel)]="formSeance.coachId" required>
+            <option value="">Choisir</option>
+            @for (c of coachs(); track c.id) {
+              <option [value]="c.id">{{ c.prenom }} {{ c.nom }} ({{ c.specialite }})</option>
+            }
+          </select>
+        </label>
+        <label>Cours
+          <select name="coursId" [(ngModel)]="formSeance.coursId" required>
+            <option value="">Choisir</option>
+            @for (c of cours(); track c.id) {
+              <option [value]="c.id">{{ c.nom }}</option>
+            }
+          </select>
+        </label>
+        <label>Date <input type="date" name="sDate" [(ngModel)]="formSeance.date" required /></label>
+        <label>Début <input type="time" name="sDebut" [(ngModel)]="formSeance.heureDebut" required /></label>
+        <label>Fin <input type="time" name="sFin" [(ngModel)]="formSeance.heureFin" required /></label>
+        <label>Places <input type="number" name="sPlaces" [(ngModel)]="formSeance.capaciteMax" min="1" required /></label>
+        <label>Prix (€) <input type="number" name="sPrix" [(ngModel)]="formSeance.prix" min="0" required /></label>
+        <div class="actions large">
+          <button type="submit">Créer la séance</button>
+          <button type="button" class="contour" (click)="formSeanceOuvert.set(false)">Annuler</button>
+        </div>
+      </form>
+    }
+
     <table>
       <thead>
         <tr><th>Date</th><th>Cours</th><th>Salle</th><th>Places</th><th></th></tr>
@@ -135,23 +155,25 @@
       </tbody>
     </table>
   </div>
-</div>
-<div class="panneau espace-haut">
-  <label>Disponibilités de la salle
-    <select name="salleDispo" [(ngModel)]="salleDispo">
-      <option value="">Choisir une salle</option>
-      @for (s of salles(); track s.id) {
-        <option [value]="s.id">{{ s.nom }}</option>
-      }
-    </select>
-  </label>
+}
 
-  @if (salleDispoId) {
-    <app-disponibilites [salleId]="salleDispoId" />
-  }
-  @if (salleDispoId) {
-  <div class="panneau espace-haut">
-    <app-avis [salleId]="salleDispoId" />
+@if (onglet() === 'dispos') {
+  <div class="panneau">
+    <div class="barre-titre"><h2>Disponibilités et avis</h2></div>
+    <label>Choisir une salle
+      <select name="salleDispo" [(ngModel)]="salleDispo">
+        <option value="">Choisir une salle</option>
+        @for (s of salles(); track s.id) {
+          <option [value]="s.id">{{ s.nom }}</option>
+        }
+      </select>
+    </label>
+
+    @if (salleDispoId) {
+      <app-disponibilites [salleId]="salleDispoId" />
+      <div class="espace-haut">
+        <app-avis [salleId]="salleDispoId" />
+      </div>
+    }
   </div>
 }
-</div>

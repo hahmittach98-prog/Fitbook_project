@@ -21,10 +21,23 @@
 }
 
 @if (coach()) {
-  <div class="deux-colonnes">
-    <div>
-      <div class="panneau espace-haut">
-        <h2>Créer une séance</h2>
+  <div class="onglets">
+    <button type="button" [class.actif]="onglet() === 'seances'" (click)="onglet.set('seances')">Mes séances</button>
+    <button type="button" [class.actif]="onglet() === 'dispos'" (click)="onglet.set('dispos')">Disponibilités</button>
+    <button type="button" [class.actif]="onglet() === 'avis'" (click)="onglet.set('avis')">Avis reçus</button>
+    <button type="button" [class.actif]="onglet() === 'profil'" (click)="onglet.set('profil')">Mon profil</button>
+  </div>
+
+  @if (onglet() === 'seances') {
+    <div class="panneau">
+      <div class="barre-titre">
+        <h2>Mes séances</h2>
+        @if (!formOuvert()) {
+          <button type="button" (click)="formOuvert.set(true)">+ Créer une séance</button>
+        }
+      </div>
+
+      @if (formOuvert()) {
         <form class="form-grille" (ngSubmit)="creer()">
           <label class="large">Cours
             <select name="coursId" [(ngModel)]="form.coursId" required>
@@ -47,33 +60,13 @@
           <label>Fin <input type="time" name="heureFin" [(ngModel)]="form.heureFin" required /></label>
           <label>Places <input type="number" name="capaciteMax" [(ngModel)]="form.capaciteMax" min="1" required /></label>
           <label>Prix (€) <input type="number" name="prix" [(ngModel)]="form.prix" min="0" required /></label>
-          <button type="submit">Créer la séance</button>
+          <div class="actions large">
+            <button type="submit">Créer la séance</button>
+            <button type="button" class="contour" (click)="formOuvert.set(false)">Annuler</button>
+          </div>
         </form>
-      </div>
+      }
 
-      <div class="panneau espace-haut">
-        <app-disponibilites [coachId]="coach().id" />
-      </div>
-       <div class="panneau espace-haut">
-        <app-avis [coachId]="coach().id" />
-      </div>
-
-    </div>
-
-    <div class="panneau espace-haut">
-        <h2>Mon profil professionnel</h2>
-        <form (ngSubmit)="enregistrerProfil()">
-          <label>Spécialité <input type="text" name="mpSpecialite" [(ngModel)]="monProfil.specialite" required /></label>
-          <label>Description <textarea name="mpDescription" [(ngModel)]="monProfil.description" required></textarea></label>
-          <label>Tarif horaire (€) <input type="number" name="mpTarif" [(ngModel)]="monProfil.tarifHoraire" min="0" required /></label>
-          <button type="submit">Enregistrer</button>
-        </form>
-    </div>
-
-
-
-    <div class="panneau">
-      <h2>Mes séances</h2>
       <table>
         <thead>
           <tr><th>Date</th><th>Cours</th><th>Salle</th><th>Places</th><th>Actions</th></tr>
@@ -88,7 +81,7 @@
               <td>
                 <div class="actions">
                   <button type="button" (click)="afficherReservations(s.id)">Réservations</button>
-                  <button type="button" (click)="supprimer(s.id)">Supprimer</button>
+                  <button type="button" class="contour" (click)="supprimer(s.id)">Supprimer</button>
                 </div>
               </td>
             </tr>
@@ -109,5 +102,29 @@
         </tbody>
       </table>
     </div>
-  </div>
+  }
+
+  @if (onglet() === 'dispos') {
+    <div class="panneau">
+      <app-disponibilites [coachId]="coach().id" />
+    </div>
+  }
+
+  @if (onglet() === 'avis') {
+    <div class="panneau">
+      <app-avis [coachId]="coach().id" />
+    </div>
+  }
+
+  @if (onglet() === 'profil') {
+    <div class="panneau">
+      <h2>Mon profil professionnel</h2>
+      <form (ngSubmit)="enregistrerProfil()">
+        <label>Spécialité <input type="text" name="mpSpecialite" [(ngModel)]="monProfil.specialite" required /></label>
+        <label>Description <textarea name="mpDescription" [(ngModel)]="monProfil.description" required></textarea></label>
+        <label>Tarif horaire (€) <input type="number" name="mpTarif" [(ngModel)]="monProfil.tarifHoraire" min="0" required /></label>
+        <button type="submit">Enregistrer</button>
+      </form>
+    </div>
+  }
 }
